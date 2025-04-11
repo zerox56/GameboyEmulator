@@ -10,7 +10,10 @@ int main(int argc, char** argv) {
     }
 
     Emulator emulator;
-    emulator.LoadRom(argv[1]);
+    if (!emulator.LoadRom(argv[1])) {
+        printf("Provided ROM file is invalid. Failed during loading.\n");
+        return 1;
+    }
 
     if (!emulator.ValidateHeader()) {
         printf("Provided ROM file is invalid. Failed header check.\n");

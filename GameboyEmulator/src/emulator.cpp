@@ -27,9 +27,12 @@ bool Emulator::LoadRom(const char* filePath) {
 		return false;
 	}
 
-	// TODO: Rom validation. Check if size is fully loaded in memory
-
 	romData.read(reinterpret_cast<char*>(&memory[pc]), size);
+	if (romData.gcount() != size) {
+		printf("ROM isn't fully loaded into memory.\n");
+		return false;
+	}
+
 	return true;
 }
 
