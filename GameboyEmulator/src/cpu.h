@@ -55,6 +55,8 @@ private:
 	CPU::CounterAction JP_A16(Instruction);
 
 	// 8bit instructions
+	uint8_t GetRegisterValue(Instruction);
+
 	CPU::CounterAction ADD_A_R(Instruction);
 	CPU::CounterAction ADC_A_R(Instruction);
 	CPU::CounterAction SUB_A_R(Instruction);

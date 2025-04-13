@@ -169,7 +169,7 @@ CPU::CounterAction CPU::JP_A16(Instruction instruction) {
 }
 
 // 8bit instructions 
-CPU::CounterAction CPU::ADD_A_R(Instruction instruction) {
+uint8_t CPU::GetRegisterValue(Instruction instruction) {
     // Mask opcode with binary masking
     uint8_t srcIndex = instruction.opcode & 0b111;
 
@@ -181,11 +181,15 @@ CPU::CounterAction CPU::ADD_A_R(Instruction instruction) {
     uint8_t value;
 
     if (srcIndex == 6) { // If 6 means nullptr = HL
-        value = instruction.memory[hl];
+        return instruction.memory[hl];
     }
     else {
-        value = *src;
+        return *src;
     }
+}
+
+CPU::CounterAction CPU::ADD_A_R(Instruction instruction) {
+    uint8_t value = GetRegisterValue(instruction);
 
     uint8_t oldA = A; // Keep oldA value for flags
     uint16_t result = oldA + value;
@@ -200,22 +204,7 @@ CPU::CounterAction CPU::ADD_A_R(Instruction instruction) {
 }
 
 CPU::CounterAction CPU::ADC_A_R(Instruction instruction) {
-    // Mask opcode with binary masking
-    uint8_t srcIndex = instruction.opcode & 0b111;
-
-    // Check the lookup table through the earlier index
-    uint8_t* src = registerLookup[srcIndex];
-
-    // Combines H and L registers to a 16-bit address
-    uint16_t hl = (H << 8) | L;
-    uint8_t value;
-
-    if (srcIndex == 6) { // If 6 means nullptr = HL
-        value = instruction.memory[hl];
-    }
-    else {
-        value = *src;
-    }
+    uint8_t value = GetRegisterValue(instruction);
 
     uint8_t oldA = A; // Keep oldA value for flags
     uint16_t result = oldA + value + C;
@@ -230,22 +219,7 @@ CPU::CounterAction CPU::ADC_A_R(Instruction instruction) {
 }
 
 CPU::CounterAction CPU::SUB_A_R(Instruction instruction) {
-    // Mask opcode with binary masking
-    uint8_t srcIndex = instruction.opcode & 0b111;
-
-    // Check the lookup table through the earlier index
-    uint8_t* src = registerLookup[srcIndex];
-
-    // Combines H and L registers to a 16-bit address
-    uint16_t hl = (H << 8) | L;
-    uint8_t value;
-
-    if (srcIndex == 6) { // If 6 means nullptr = HL
-        value = instruction.memory[hl];
-    }
-    else {
-        value = *src;
-    }
+    uint8_t value = GetRegisterValue(instruction);
 
     uint8_t oldA = A; // Keep oldA value for flags
     uint16_t result = oldA - value;
@@ -260,22 +234,7 @@ CPU::CounterAction CPU::SUB_A_R(Instruction instruction) {
 }
 
 CPU::CounterAction CPU::SBC_A_R(Instruction instruction) {
-    // Mask opcode with binary masking
-    uint8_t srcIndex = instruction.opcode & 0b111;
-
-    // Check the lookup table through the earlier index
-    uint8_t* src = registerLookup[srcIndex];
-
-    // Combines H and L registers to a 16-bit address
-    uint16_t hl = (H << 8) | L;
-    uint8_t value;
-
-    if (srcIndex == 6) { // If 6 means nullptr = HL
-        value = instruction.memory[hl];
-    }
-    else {
-        value = *src;
-    }
+    uint8_t value = GetRegisterValue(instruction);
 
     uint8_t oldA = A; // Keep oldA value for flags
     uint16_t result = oldA - value - C;
@@ -290,22 +249,7 @@ CPU::CounterAction CPU::SBC_A_R(Instruction instruction) {
 }
 
 CPU::CounterAction CPU::AND_A_R(Instruction instruction) {
-    // Mask opcode with binary masking
-    uint8_t srcIndex = instruction.opcode & 0b111;
-
-    // Check the lookup table through the earlier index
-    uint8_t* src = registerLookup[srcIndex];
-
-    // Combines H and L registers to a 16-bit address
-    uint16_t hl = (H << 8) | L;
-    uint8_t value;
-
-    if (srcIndex == 6) { // If 6 means nullptr = HL
-        value = instruction.memory[hl];
-    }
-    else {
-        value = *src;
-    }
+    uint8_t value = GetRegisterValue(instruction);
 
     uint8_t oldA = A; // Keep oldA value for flags
     uint16_t result = value & oldA;
@@ -320,22 +264,7 @@ CPU::CounterAction CPU::AND_A_R(Instruction instruction) {
 }
 
 CPU::CounterAction CPU::XOR_A_R(Instruction instruction) {
-    // Mask opcode with binary masking
-    uint8_t srcIndex = instruction.opcode & 0b111;
-
-    // Check the lookup table through the earlier index
-    uint8_t* src = registerLookup[srcIndex];
-
-    // Combines H and L registers to a 16-bit address
-    uint16_t hl = (H << 8) | L;
-    uint8_t value;
-
-    if (srcIndex == 6) { // If 6 means nullptr = HL
-        value = instruction.memory[hl];
-    }
-    else {
-        value = *src;
-    }
+    uint8_t value = GetRegisterValue(instruction);
 
     uint8_t oldA = A; // Keep oldA value for flags
     uint16_t result = value ^ oldA;
@@ -350,22 +279,7 @@ CPU::CounterAction CPU::XOR_A_R(Instruction instruction) {
 }
 
 CPU::CounterAction CPU::OR_A_R(Instruction instruction) {
-    // Mask opcode with binary masking
-    uint8_t srcIndex = instruction.opcode & 0b111;
-
-    // Check the lookup table through the earlier index
-    uint8_t* src = registerLookup[srcIndex];
-
-    // Combines H and L registers to a 16-bit address
-    uint16_t hl = (H << 8) | L;
-    uint8_t value;
-
-    if (srcIndex == 6) { // If 6 means nullptr = HL
-        value = instruction.memory[hl];
-    }
-    else {
-        value = *src;
-    }
+    uint8_t value = GetRegisterValue(instruction);
 
     uint8_t oldA = A; // Keep oldA value for flags
     uint16_t result = value | oldA;
@@ -380,22 +294,7 @@ CPU::CounterAction CPU::OR_A_R(Instruction instruction) {
 }
 
 CPU::CounterAction CPU::CP_A_R(Instruction instruction) {
-    // Mask opcode with binary masking
-    uint8_t srcIndex = instruction.opcode & 0b111;
-
-    // Check the lookup table through the earlier index
-    uint8_t* src = registerLookup[srcIndex];
-
-    // Combines H and L registers to a 16-bit address
-    uint16_t hl = (H << 8) | L;
-    uint8_t value;
-
-    if (srcIndex == 6) { // If 6 means nullptr = HL
-        value = instruction.memory[hl];
-    }
-    else {
-        value = *src;
-    }
+    uint8_t value = GetRegisterValue(instruction);
 
     uint8_t oldA = A; // Keep oldA value for flags
     uint16_t result = oldA - value;
