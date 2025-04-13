@@ -27,9 +27,54 @@ private:
 	uint8_t A, B, C, D, E, H, L;
 	// Registers loopup table (nullptr = HL)
 	uint8_t* registerLookup[8] = { &B, &C, &D, &E, &H, &L, nullptr, &A };
+	// Registers pair functions
+	uint8_t GetBC() const {
+		return (B << 8) | C;
+	}
+
+	void SetBC(uint8_t BC) {
+		B = BC >> 8; C = BC & 0xFF;
+	}
+
+	uint8_t GetDE() const {
+		return (D << 8) | E;
+	}
+
+	void SetDE(uint8_t DE) {
+		D = DE >> 8; E = DE & 0xFF;
+	}
+
+	uint8_t GetHL() const {
+		return (H << 8) | L;
+	}
+
+	void SetHL(uint8_t HL) {
+		H = HL >> 8; L = HL & 0xFF;
+	}
+
+	uint8_t GetAF() const {
+		return (A << 8) | GetFlags();
+	}
+
+	void SetAF(uint8_t AF) {
+		A = AF >> 8;
+		SetFlags(AF & 0xF0);
+	}
 
 	// Flags
 	uint8_t FZ, FN, FH, FC;
+
+	// Flags functions
+	uint8_t GetFlags() const {
+		return (FZ << 7) | (FN << 6) | (FH << 5) | (FC << 4);
+	}
+
+	void SetFlags(uint8_t F) {
+		FZ >> 7;
+		FN >> 6;
+		FH >> 5;
+		FC >> 4;
+	}
 
 	using OpcodeFunc = CPU::CounterAction (CPU::*)(Instruction);
 
@@ -86,8 +131,6 @@ private:
 	CPU::CounterAction UnimplementedOpcode(Instruction);
 
 	uint8_t GetBytesByOpcode(uint8_t opcode);
-
-	uint8_t GetFlags();
 public:
 	CPU();
 	void ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc);

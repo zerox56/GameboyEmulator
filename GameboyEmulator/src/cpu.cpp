@@ -391,10 +391,6 @@ CPU::CounterAction CPU::UnimplementedOpcode(Instruction instruction) {
     exit(1);
 }
 
-uint8_t CPU::GetFlags() {
-    return (FZ << 7) | (FN << 6) | (FH << 5) | (FC << 4);
-}
-
 uint8_t CPU::GetBytesByOpcode(uint8_t opcode) {
     return instructionBytes[opcode];
 }
