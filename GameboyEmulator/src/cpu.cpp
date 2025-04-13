@@ -95,13 +95,18 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
 
     // 0x10–0x1F
     table[0x16] = &CPU::LD_D_N8;
+    table[0x18] = &CPU::JR_N16;
     table[0x1E] = &CPU::LD_E_N8;
 
     // 0x20–0x2F
+    table[0x20] = &CPU::JR_NZ_N16;
     table[0x26] = &CPU::LD_H_N8;
+    table[0x28] = &CPU::JR_Z_N16;
     table[0x2E] = &CPU::LD_L_N8;
 
     // 0xC0–0xCF
+    table[0x30] = &CPU::JR_NC_N16;
+    table[0x38] = &CPU::JR_C_N16;
     table[0xC3] = &CPU::JP_N16;
 
     return table;
