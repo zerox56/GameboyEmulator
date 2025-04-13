@@ -159,13 +159,11 @@ CPU::CounterAction CPU::LD_R_R(Instruction instruction) {
     uint8_t* dst = registerLookup[dstIndex];
     uint8_t* src = registerLookup[srcIndex];
 
-    uint16_t hl = (H << 8) | L;
-
     if (dstIndex == 6 && src) {
-        instruction.memory[hl] = *src;
+        instruction.memory[GetHL()] = *src;
     }
     else if (srcIndex == 6 && dst) {
-        *dst = instruction.memory[hl];
+        *dst = instruction.memory[GetHL()];
     }
     else if (dst && src) {
         *dst = *src;
@@ -222,12 +220,8 @@ uint8_t CPU::GetRegisterValue(Instruction instruction) {
     // Check the lookup table through the earlier index
     uint8_t* src = registerLookup[srcIndex];
 
-    // Combines H and L registers to a 16-bit address
-    uint16_t hl = (H << 8) | L;
-    uint8_t value;
-
     if (srcIndex == 6) { // If 6 means nullptr = HL
-        return instruction.memory[hl];
+        return instruction.memory[GetHL()];
     }
     else {
         return *src;
@@ -258,7 +252,7 @@ CPU::CounterAction CPU::ADC_A_R(Instruction instruction) {
 
     FZ = (A == 0);
     FN = 0;
-    FH = ((oldA & 0xF) - (value & 0xF)) < 0xF; // Check if overflows to bit 4 or higher (half carry)
+    FH = ((oldA & 0xF) + (value & 0xF)) > 0xF; // Check if overflows to bit 4 or higher (half carry)
     FC = result > 0xFF; // Check if overflows to bit 8
 
     return CPU::CounterAction::Advance;
@@ -355,28 +349,54 @@ CPU::CounterAction CPU::CP_A_R(Instruction instruction) {
 
 CPU::CounterAction CPU::INC_R(Instruction instruction) {
     uint8_t dstIndex = GetRegister(instruction);
-    uint8_t* dst = registerLookup[dstIndex];
 
-    uint8_t oldR = (uint8_t)dst; // Keep old R value for flags
-    dst += 1;
+    if (dstIndex == 6) { // If 6 means nullptr = HL
+        uint16_t HL = GetHL();
+        uint8_t value = instruction.memory[HL];
+        uint8_t oldValue = value;
+        value++;
+        instruction.memory[HL] = value;
 
-    FZ = (dst == 0);
-    FN = 0;
-    FH = ((oldR & 0xF) + ((uint8_t)dst & 0xF)) > 0xF; // Check if overflows to bit 4 or higher (half carry)
+        FZ = (value == 0);
+        FN = 0;
+        FH = ((oldValue & 0xF) + 1) > 0xF; // Check if overflows to bit 4 or higher (half carry)
+    }
+    else {
+        uint8_t* dst = registerLookup[dstIndex];
+        uint8_t oldR = *dst; // Keep old R value for flags
+        *dst = oldR + 1;
+
+        FZ = (*dst == 0);
+        FN = 0;
+        FH = ((oldR & 0xF) + 1) > 0xF; // Check if overflows to bit 4 or higher (half carry)
+    }
 
     return CPU::CounterAction::Advance;
 }
 
 CPU::CounterAction CPU::DEC_R(Instruction instruction) {
     uint8_t dstIndex = GetRegister(instruction);
-    uint8_t* dst = registerLookup[dstIndex];
 
-    uint8_t oldR = (uint8_t)dst; // Keep old R value for flags
-    dst -= 1;
+    if (dstIndex == 6) { // If 6 means nullptr = HL
+        uint16_t HL = GetHL();
+        uint8_t value = instruction.memory[HL];
+        uint8_t oldValue = value;
+        value--;
+        instruction.memory[HL] = value;
 
-    FZ = (dst == 0);
-    FN = 1;
-    FH = ((oldR & 0xF) - ((uint8_t)dst & 0xF)) < 0xF; // Check if underflow from bit 4 lower (half borrow)
+        FZ = (value == 0);
+        FN = 0;
+        FH = ((oldValue & 0xF) - 1) < 0xF; // Check if underflow from bit 4 lower (half borrow)
+    }
+    else {
+        uint8_t* dst = registerLookup[dstIndex];
+        uint8_t oldR = *dst; // Keep old R value for flags
+        *dst = oldR - 1;
+
+        FZ = (*dst == 0);
+        FN = 1;
+        FH = ((oldR & 0xF) - 1) < 0xF; // Check if underflow from bit 4 lower (half borrow)
+    }
 
     return CPU::CounterAction::Advance;
 }

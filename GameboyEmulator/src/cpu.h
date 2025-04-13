@@ -28,35 +28,35 @@ private:
 	// Registers loopup table (nullptr = HL)
 	uint8_t* registerLookup[8] = { &B, &C, &D, &E, &H, &L, nullptr, &A };
 	// Registers pair functions
-	uint8_t GetBC() const {
+	uint16_t GetBC() const {
 		return (B << 8) | C;
 	}
 
-	void SetBC(uint8_t BC) {
+	void SetBC(uint16_t BC) {
 		B = BC >> 8; C = BC & 0xFF;
 	}
 
-	uint8_t GetDE() const {
+	uint16_t GetDE() const {
 		return (D << 8) | E;
 	}
 
-	void SetDE(uint8_t DE) {
+	void SetDE(uint16_t DE) {
 		D = DE >> 8; E = DE & 0xFF;
 	}
 
-	uint8_t GetHL() const {
+	uint16_t GetHL() const {
 		return (H << 8) | L;
 	}
 
-	void SetHL(uint8_t HL) {
+	void SetHL(uint16_t HL) {
 		H = HL >> 8; L = HL & 0xFF;
 	}
 
-	uint8_t GetAF() const {
+	uint16_t GetAF() const {
 		return (A << 8) | GetFlags();
 	}
 
-	void SetAF(uint8_t AF) {
+	void SetAF(uint16_t AF) {
 		A = AF >> 8;
 		SetFlags(AF & 0xF0);
 	}
@@ -70,10 +70,10 @@ private:
 	}
 
 	void SetFlags(uint8_t F) {
-		FZ = FZ >> 7;
-		FN = FN >> 6;
-		FH = FH >> 5;
-		FC = FC >> 4;
+		FZ = (F >> 7) & 1;
+		FN = (F >> 6) & 1;
+		FH = (F >> 5) & 1;
+		FC = (F >> 4) & 1;
 	}
 
 	using OpcodeFunc = CPU::CounterAction (CPU::*)(Instruction);
