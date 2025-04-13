@@ -18,6 +18,14 @@ private:
 		Instruction(uint16_t& pc) : pc(pc) {}
 	};
 
+	// Debug
+	uint8_t debugCycleMax = 5;
+	uint8_t debugCycleCurrent = 5;
+
+	// Registers
+	uint8_t A, B, C, D, E, H, L;
+	uint16_t BC, DE, HL;
+
 	using OpcodeFunc = CPU::CounterAction (CPU::*)(Instruction);
 
 	const uint8_t instructionsAmount = 0x100;
@@ -28,9 +36,19 @@ private:
 
 	std::vector<CPU::OpcodeFunc> InitializeOpcodeTable();
 
-	// Opcode load handlers
-	CPU::CounterAction NOP(Instruction);
+	// Load instructions
+	CPU::CounterAction LD_B_N8(Instruction);
+	CPU::CounterAction LD_C_N8(Instruction);
+	CPU::CounterAction LD_D_N8(Instruction);
+	CPU::CounterAction LD_E_N8(Instruction);
+	CPU::CounterAction LD_H_N8(Instruction);
+	CPU::CounterAction LD_L_N8(Instruction);
+
+	// Jump instructions
 	CPU::CounterAction JP_A16(Instruction);
+
+	// Other instructions
+	CPU::CounterAction NOP(Instruction);
 
 	// Opcode fallback (Can be removed after everything implemented)
 	CPU::CounterAction UnimplementedOpcode(Instruction);
