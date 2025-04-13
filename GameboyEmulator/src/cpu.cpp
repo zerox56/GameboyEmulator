@@ -107,9 +107,18 @@ CPU::CounterAction CPU::LD_R_R(Instruction instruction) {
     uint8_t* dst = registerLookup[dstIndex];
     uint8_t* src = registerLookup[srcIndex];
 
-    if (dst && src) {
+    uint16_t hl = (H << 8) | L;
+
+    if (dstIndex == 6 && src) {
+        instruction.memory[hl] = *src;
+    }
+    else if (srcIndex == 6 && dst) {
+        *dst = instruction.memory[hl];
+    }
+    else if (dst && src) {
         *dst = *src;
     }
+
     return CPU::CounterAction::Advance;
 }
 
@@ -134,7 +143,7 @@ uint8_t CPU::GetBytesByOpcode(uint8_t opcode) {
 }
 
 void CPU::ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc) {
-    Instruction instruction(pc);
+    Instruction instruction(memory, pc);
     instruction.opcode = memory[pc];
 
     printf("PC: 0x%04X | Opcode: %02X\n", pc, instruction.opcode);

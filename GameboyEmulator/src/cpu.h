@@ -13,9 +13,10 @@ private:
 		uint8_t opcode;
 		uint8_t L;
 		uint8_t H;
+		std::vector<uint8_t>& memory;
 		uint16_t& pc;
 
-		Instruction(uint16_t& pc) : pc(pc) {}
+		Instruction(std::vector<uint8_t>& memory, uint16_t& pc) : memory(memory), pc(pc) {}
 	};
 
 	// Debug
@@ -25,6 +26,7 @@ private:
 	// Registers
 	uint8_t A, B, C, D, E, H, L;
 	uint16_t BC, DE, HL;
+	// Registers loopup table (nullptr = HL)
 	uint8_t* registerLookup[8] = { &B, &C, &D, &E, &H, &L, nullptr, &A };
 
 	using OpcodeFunc = CPU::CounterAction (CPU::*)(Instruction);
