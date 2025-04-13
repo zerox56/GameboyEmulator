@@ -97,18 +97,24 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
 
     // 0x00–0x0F
     table[0x00] = &CPU::NOP;
+    table[0x03] = &CPU::INC_BC;
     table[0x06] = &CPU::LD_B_N8;
+    table[0x0B] = &CPU::DEC_BC;
     table[0x0E] = &CPU::LD_C_N8;
 
     // 0x10–0x1F
     table[0x16] = &CPU::LD_D_N8;
+    table[0x13] = &CPU::INC_DE;
     table[0x18] = &CPU::JR_N16;
+    table[0x1B] = &CPU::DEC_DE;
     table[0x1E] = &CPU::LD_E_N8;
 
     // 0x20–0x2F
     table[0x20] = &CPU::JR_NZ_N16;
+    table[0x23] = &CPU::INC_HL;
     table[0x26] = &CPU::LD_H_N8;
     table[0x28] = &CPU::JR_Z_N16;
+    table[0x2B] = &CPU::DEC_HL;
     table[0x2E] = &CPU::LD_L_N8;
 
     // 0xC0–0xCF
@@ -397,6 +403,49 @@ CPU::CounterAction CPU::DEC_R(Instruction instruction) {
         FN = 1;
         FH = ((oldR & 0xF) - 1) < 0xF; // Check if underflow from bit 4 lower (half borrow)
     }
+
+    return CPU::CounterAction::Advance;
+}
+
+// 16bit instructions 
+CPU::CounterAction CPU::INC_BC(Instruction instruction) {
+    uint16_t BC = GetBC();
+    SetBC(++BC);
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::INC_DE(Instruction instruction) {
+    uint16_t DE = GetDE();
+    SetDE(++DE);
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::INC_HL(Instruction instruction) {
+    uint16_t HL = GetHL();
+    SetHL(++HL);
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::DEC_BC(Instruction instruction) {
+    uint16_t BC = GetBC();
+    SetBC(--BC);
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::DEC_DE(Instruction instruction) {
+    uint16_t DE = GetDE();
+    SetDE(--DE);
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::DEC_HL(Instruction instruction) {
+    uint16_t HL = GetHL();
+    SetHL(--HL);
 
     return CPU::CounterAction::Advance;
 }

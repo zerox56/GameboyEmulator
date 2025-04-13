@@ -124,6 +124,14 @@ private:
 	CPU::CounterAction INC_R(Instruction);
 	CPU::CounterAction DEC_R(Instruction);
 
+	// 16bit instructions
+	CPU::CounterAction INC_BC(Instruction);
+	CPU::CounterAction INC_DE(Instruction);
+	CPU::CounterAction INC_HL(Instruction);
+	CPU::CounterAction DEC_BC(Instruction);
+	CPU::CounterAction DEC_DE(Instruction);
+	CPU::CounterAction DEC_HL(Instruction);
+
 	// Other instructions
 	CPU::CounterAction NOP(Instruction);
 
