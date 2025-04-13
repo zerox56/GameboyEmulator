@@ -43,6 +43,11 @@ CPU::CPU() : opcodeTable(InitializeOpcodeTable()) {}
 std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
     std::vector<OpcodeFunc> table(0x100, &CPU::UnimplementedOpcode);
 
+    // Load R, R functions
+    for (uint8_t opcode = 0x40; opcode <= 0x7F; opcode++) {
+        opcodeTable[opcode] = &CPU::LD_R_R;
+    }
+
     // 0x00–0x0F
     table[0x00] = &CPU::NOP;
     table[0x06] = &CPU::LD_B_N8;
@@ -90,6 +95,21 @@ CPU::CounterAction CPU::LD_H_N8(Instruction instruction) {
 
 CPU::CounterAction CPU::LD_L_N8(Instruction instruction) {
     L = instruction.L;
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_R_R(Instruction instruction) {
+    // Mask opcode for dst and src register
+    uint8_t dstIndex = (instruction.opcode >> 3) & 0b111;
+    uint8_t srcIndex = instruction.opcode & 0b111;
+
+    // Get register by index
+    uint8_t* dst = registerLookup[dstIndex];
+    uint8_t* src = registerLookup[srcIndex];
+
+    if (dst && src) {
+        *dst = *src;
+    }
     return CPU::CounterAction::Advance;
 }
 

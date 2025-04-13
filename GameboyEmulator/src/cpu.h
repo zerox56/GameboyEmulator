@@ -25,6 +25,7 @@ private:
 	// Registers
 	uint8_t A, B, C, D, E, H, L;
 	uint16_t BC, DE, HL;
+	uint8_t* registerLookup[8] = { &B, &C, &D, &E, &H, &L, nullptr, &A };
 
 	using OpcodeFunc = CPU::CounterAction (CPU::*)(Instruction);
 
@@ -43,6 +44,7 @@ private:
 	CPU::CounterAction LD_E_N8(Instruction);
 	CPU::CounterAction LD_H_N8(Instruction);
 	CPU::CounterAction LD_L_N8(Instruction);
+	CPU::CounterAction LD_R_R(Instruction);
 
 	// Jump instructions
 	CPU::CounterAction JP_A16(Instruction);
