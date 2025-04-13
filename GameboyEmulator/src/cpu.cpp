@@ -48,6 +48,46 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
         opcodeTable[opcode] = &CPU::LD_R_R;
     }
 
+    // ADD A, R functions
+    for (uint8_t opcode = 0x80; opcode <= 0x87; opcode++) {
+        opcodeTable[opcode] = &CPU::ADD_A_R;
+    }
+
+    // ADC A, R functions
+    for (uint8_t opcode = 0x88; opcode <= 0x8F; opcode++) {
+        opcodeTable[opcode] = &CPU::ADC_A_R;
+    }
+
+    // SUB A, R functions
+    for (uint8_t opcode = 0x90; opcode <= 0x97; opcode++) {
+        opcodeTable[opcode] = &CPU::SUB_A_R;
+    }
+
+    // SBC A, R functions
+    for (uint8_t opcode = 0x98; opcode <= 0x9F; opcode++) {
+        opcodeTable[opcode] = &CPU::SBC_A_R;
+    }
+
+    // AND A, R functions
+    for (uint8_t opcode = 0xA0; opcode <= 0xA7; opcode++) {
+        opcodeTable[opcode] = &CPU::AND_A_R;
+    }
+
+    // XOR A, R functions
+    for (uint8_t opcode = 0xA8; opcode <= 0xAF; opcode++) {
+        opcodeTable[opcode] = &CPU::XOR_A_R;
+    }
+
+    // OR A, R functions
+    for (uint8_t opcode = 0xB0; opcode <= 0xB7; opcode++) {
+        opcodeTable[opcode] = &CPU::OR_A_R;
+    }
+
+    // CP A, R functions
+    for (uint8_t opcode = 0xB8; opcode <= 0xBF; opcode++) {
+        opcodeTable[opcode] = &CPU::CP_A_R;
+    }
+
     // 0x00–0x0F
     table[0x00] = &CPU::NOP;
     table[0x06] = &CPU::LD_B_N8;
@@ -128,6 +168,246 @@ CPU::CounterAction CPU::JP_A16(Instruction instruction) {
     return CPU::CounterAction::Jump;
 }
 
+// 8bit instructions 
+CPU::CounterAction CPU::ADD_A_R(Instruction instruction) {
+    // Mask opcode with binary masking
+    uint8_t srcIndex = instruction.opcode & 0b111;
+
+    // Check the lookup table through the earlier index
+    uint8_t* src = registerLookup[srcIndex];
+
+    // Combines H and L registers to a 16-bit address
+    uint16_t hl = (H << 8) | L;
+    uint8_t value;
+
+    if (srcIndex == 6) { // If 6 means nullptr = HL
+        value = instruction.memory[hl];
+    }
+    else {
+        value = *src;
+    }
+
+    uint8_t oldA = A; // Keep oldA value for flags
+    uint16_t result = oldA + value;
+    A = result & 0xFF; // Mask back to 8bit size
+
+    FZ = (A == 0);
+    FN = 0;
+    FH = ((oldA & 0xF) + (value & 0xF)) > 0xF; // Check if overflows to bit 4 or higher (half carry)
+    FC = result > 0xFF; // Check if overflows to bit 8
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::ADC_A_R(Instruction instruction) {
+    // Mask opcode with binary masking
+    uint8_t srcIndex = instruction.opcode & 0b111;
+
+    // Check the lookup table through the earlier index
+    uint8_t* src = registerLookup[srcIndex];
+
+    // Combines H and L registers to a 16-bit address
+    uint16_t hl = (H << 8) | L;
+    uint8_t value;
+
+    if (srcIndex == 6) { // If 6 means nullptr = HL
+        value = instruction.memory[hl];
+    }
+    else {
+        value = *src;
+    }
+
+    uint8_t oldA = A; // Keep oldA value for flags
+    uint16_t result = oldA + value + C;
+    A = result & 0xFF; // Mask back to 8bit size
+
+    FZ = (A == 0);
+    FN = 0;
+    FH = ((oldA & 0xF) - (value & 0xF)) < 0xF; // Check if overflows to bit 4 or higher (half carry)
+    FC = result > 0xFF; // Check if overflows to bit 8
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::SUB_A_R(Instruction instruction) {
+    // Mask opcode with binary masking
+    uint8_t srcIndex = instruction.opcode & 0b111;
+
+    // Check the lookup table through the earlier index
+    uint8_t* src = registerLookup[srcIndex];
+
+    // Combines H and L registers to a 16-bit address
+    uint16_t hl = (H << 8) | L;
+    uint8_t value;
+
+    if (srcIndex == 6) { // If 6 means nullptr = HL
+        value = instruction.memory[hl];
+    }
+    else {
+        value = *src;
+    }
+
+    uint8_t oldA = A; // Keep oldA value for flags
+    uint16_t result = oldA - value;
+    A = result & 0xFF; // Mask back to 8bit size
+
+    FZ = (A == 0);
+    FN = 1;
+    FH = ((oldA & 0xF) - (value & 0xF)) < 0xF; // Check if underflow from bit 4 lower (half borrow)
+    FC = oldA < value; // Check if underflow from bit 8
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::SBC_A_R(Instruction instruction) {
+    // Mask opcode with binary masking
+    uint8_t srcIndex = instruction.opcode & 0b111;
+
+    // Check the lookup table through the earlier index
+    uint8_t* src = registerLookup[srcIndex];
+
+    // Combines H and L registers to a 16-bit address
+    uint16_t hl = (H << 8) | L;
+    uint8_t value;
+
+    if (srcIndex == 6) { // If 6 means nullptr = HL
+        value = instruction.memory[hl];
+    }
+    else {
+        value = *src;
+    }
+
+    uint8_t oldA = A; // Keep oldA value for flags
+    uint16_t result = oldA - value - C;
+    A = result & 0xFF; // Mask back to 8bit size
+
+    FZ = (A == 0);
+    FN = 1;
+    FH = ((oldA & 0xF) - (value & 0xF)) < 0xF; // Check if underflow from bit 4 lower (half borrow)
+    FC = oldA < value; // Check if underflow from bit 8
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::AND_A_R(Instruction instruction) {
+    // Mask opcode with binary masking
+    uint8_t srcIndex = instruction.opcode & 0b111;
+
+    // Check the lookup table through the earlier index
+    uint8_t* src = registerLookup[srcIndex];
+
+    // Combines H and L registers to a 16-bit address
+    uint16_t hl = (H << 8) | L;
+    uint8_t value;
+
+    if (srcIndex == 6) { // If 6 means nullptr = HL
+        value = instruction.memory[hl];
+    }
+    else {
+        value = *src;
+    }
+
+    uint8_t oldA = A; // Keep oldA value for flags
+    uint16_t result = value & oldA;
+    A = result & 0xFF; // Mask back to 8bit size
+
+    FZ = (A == 0);
+    FN = 0;
+    FH = 1;
+    FC = 0;
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::XOR_A_R(Instruction instruction) {
+    // Mask opcode with binary masking
+    uint8_t srcIndex = instruction.opcode & 0b111;
+
+    // Check the lookup table through the earlier index
+    uint8_t* src = registerLookup[srcIndex];
+
+    // Combines H and L registers to a 16-bit address
+    uint16_t hl = (H << 8) | L;
+    uint8_t value;
+
+    if (srcIndex == 6) { // If 6 means nullptr = HL
+        value = instruction.memory[hl];
+    }
+    else {
+        value = *src;
+    }
+
+    uint8_t oldA = A; // Keep oldA value for flags
+    uint16_t result = value ^ oldA;
+    A = result & 0xFF; // Mask back to 8bit size
+
+    FZ = (A == 0);
+    FN = 0;
+    FH = 0;
+    FC = 0;
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::OR_A_R(Instruction instruction) {
+    // Mask opcode with binary masking
+    uint8_t srcIndex = instruction.opcode & 0b111;
+
+    // Check the lookup table through the earlier index
+    uint8_t* src = registerLookup[srcIndex];
+
+    // Combines H and L registers to a 16-bit address
+    uint16_t hl = (H << 8) | L;
+    uint8_t value;
+
+    if (srcIndex == 6) { // If 6 means nullptr = HL
+        value = instruction.memory[hl];
+    }
+    else {
+        value = *src;
+    }
+
+    uint8_t oldA = A; // Keep oldA value for flags
+    uint16_t result = value | oldA;
+    A = result & 0xFF; // Mask back to 8bit size
+
+    FZ = (A == 0);
+    FN = 0;
+    FH = 0;
+    FC = 0;
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::CP_A_R(Instruction instruction) {
+    // Mask opcode with binary masking
+    uint8_t srcIndex = instruction.opcode & 0b111;
+
+    // Check the lookup table through the earlier index
+    uint8_t* src = registerLookup[srcIndex];
+
+    // Combines H and L registers to a 16-bit address
+    uint16_t hl = (H << 8) | L;
+    uint8_t value;
+
+    if (srcIndex == 6) { // If 6 means nullptr = HL
+        value = instruction.memory[hl];
+    }
+    else {
+        value = *src;
+    }
+
+    uint8_t oldA = A; // Keep oldA value for flags
+    uint16_t result = oldA - value;
+
+    FZ = ((result & 0xFF) == 0); // Mask back to 8bit size
+    FN = 1;
+    FH = ((oldA & 0xF) - (value & 0xF)) < 0xF; // Check if underflow from bit 4 lower (half borrow)
+    FC = oldA < value; // Check if underflow from bit 8
+
+    return CPU::CounterAction::Advance;
+}
+
 // Other instructions
 CPU::CounterAction CPU::NOP(Instruction) {
     return CPU::CounterAction::Advance;
@@ -136,6 +416,10 @@ CPU::CounterAction CPU::NOP(Instruction) {
 CPU::CounterAction CPU::UnimplementedOpcode(Instruction instruction) {
     printf("Unimplemented opcode\n");
     exit(1);
+}
+
+uint8_t CPU::GetFlags() {
+    return (FZ << 7) | (FN << 6) | (FH << 5) | (FC << 4);
 }
 
 uint8_t CPU::GetBytesByOpcode(uint8_t opcode) {

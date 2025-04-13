@@ -29,6 +29,9 @@ private:
 	// Registers loopup table (nullptr = HL)
 	uint8_t* registerLookup[8] = { &B, &C, &D, &E, &H, &L, nullptr, &A };
 
+	// Flags
+	uint8_t FZ, FN, FH, FC;
+
 	using OpcodeFunc = CPU::CounterAction (CPU::*)(Instruction);
 
 	const uint8_t instructionsAmount = 0x100;
@@ -51,6 +54,16 @@ private:
 	// Jump instructions
 	CPU::CounterAction JP_A16(Instruction);
 
+	// 8bit instructions
+	CPU::CounterAction ADD_A_R(Instruction);
+	CPU::CounterAction ADC_A_R(Instruction);
+	CPU::CounterAction SUB_A_R(Instruction);
+	CPU::CounterAction SBC_A_R(Instruction);
+	CPU::CounterAction AND_A_R(Instruction);
+	CPU::CounterAction XOR_A_R(Instruction);
+	CPU::CounterAction OR_A_R(Instruction);
+	CPU::CounterAction CP_A_R(Instruction);
+
 	// Other instructions
 	CPU::CounterAction NOP(Instruction);
 
@@ -58,6 +71,8 @@ private:
 	CPU::CounterAction UnimplementedOpcode(Instruction);
 
 	uint8_t GetBytesByOpcode(uint8_t opcode);
+
+	uint8_t GetFlags();
 public:
 	CPU();
 	void ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc);
