@@ -102,7 +102,7 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
     table[0x2E] = &CPU::LD_L_N8;
 
     // 0xC0–0xCF
-    table[0xC3] = &CPU::JP_A16;
+    table[0xC3] = &CPU::JP_N16;
 
     return table;
 }
@@ -163,9 +163,39 @@ CPU::CounterAction CPU::LD_R_R(Instruction instruction) {
 }
 
 // Jump instructions
-CPU::CounterAction CPU::JP_A16(Instruction instruction) {
+CPU::CounterAction CPU::JumpRelative(Instruction instruction) {
+    if (instruction.H == 0x00) {
+        return CPU::CounterAction::Advance;
+    }
+
+    instruction.pc += (int8_t)instruction.H;
+
+    return CPU::CounterAction::Jump;
+}
+
+CPU::CounterAction CPU::JP_N16(Instruction instruction) {
     instruction.pc = (instruction.H << 8) | instruction.L;
     return CPU::CounterAction::Jump;
+}
+
+CPU::CounterAction CPU::JR_N16(Instruction instruction) {
+    return JumpRelative(instruction);
+}
+
+CPU::CounterAction CPU::JR_NZ_N16(Instruction instruction) {
+    return FZ == 0 ? JumpRelative(instruction) : CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::JR_Z_N16(Instruction instruction) {
+    return FZ == 1 ? JumpRelative(instruction) : CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::JR_NC_N16(Instruction instruction) {
+    return FC == 0 ? JumpRelative(instruction) : CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::JR_C_N16(Instruction instruction) {
+    return FC == 1 ? JumpRelative(instruction) : CPU::CounterAction::Advance;
 }
 
 // 8bit instructions 

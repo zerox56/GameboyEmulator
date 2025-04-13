@@ -52,7 +52,14 @@ private:
 	CPU::CounterAction LD_R_R(Instruction);
 
 	// Jump instructions
-	CPU::CounterAction JP_A16(Instruction);
+	CPU::CounterAction JumpRelative(Instruction);
+
+	CPU::CounterAction JP_N16(Instruction);
+	CPU::CounterAction JR_N16(Instruction);
+	CPU::CounterAction JR_NZ_N16(Instruction);
+	CPU::CounterAction JR_Z_N16(Instruction);
+	CPU::CounterAction JR_NC_N16(Instruction);
+	CPU::CounterAction JR_C_N16(Instruction);
 
 	// 8bit instructions
 	uint8_t GetRegisterValue(Instruction);
