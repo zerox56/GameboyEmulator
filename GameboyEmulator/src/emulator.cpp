@@ -1,4 +1,5 @@
 #include "emulator.h"
+#include "cpu.h"
 
 #include <cstdint>
 #include <fstream>
@@ -49,9 +50,7 @@ void Emulator::Cycle() {
 		printf("PC out of bounds: %02X\n", pc);
 		return;
 	}
+	static CPU cpu;
 
-	uint8_t opcode = memory[pc];
-	printf("PC: 0x%02X | Opcode: %02X\n", pc, opcode);
-
-	pc++;
+	cpu.ExecuteOpcode(memory, pc);
 }
