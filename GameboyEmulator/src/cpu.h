@@ -70,10 +70,10 @@ private:
 	}
 
 	void SetFlags(uint8_t F) {
-		FZ >> 7;
-		FN >> 6;
-		FH >> 5;
-		FC >> 4;
+		FZ = FZ >> 7;
+		FN = FN >> 6;
+		FH = FH >> 5;
+		FC = FC >> 4;
 	}
 
 	using OpcodeFunc = CPU::CounterAction (CPU::*)(Instruction);
