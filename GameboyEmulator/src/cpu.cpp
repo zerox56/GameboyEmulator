@@ -88,6 +88,13 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
         opcodeTable[opcode] = &CPU::CP_A_R;
     }
 
+    // INC R and DEC R functions
+    for (uint8_t index = 0; index < 8; index++) {
+        uint8_t offset = EightFunctionOffset * index;
+        opcodeTable[EightINCStart + offset] = &CPU::INC_R;
+        opcodeTable[EightDECStart + offset] = &CPU::DEC_R;
+    }
+
     // 0x00–0x0F
     table[0x00] = &CPU::NOP;
     table[0x06] = &CPU::LD_B_N8;
@@ -203,10 +210,14 @@ CPU::CounterAction CPU::JR_C_N16(Instruction instruction) {
     return FC == 1 ? JumpRelative(instruction) : CPU::CounterAction::Advance;
 }
 
+uint8_t CPU::GetRegister(Instruction instruction) {
+    // Mask opcode with binary masking
+    return instruction.opcode & 0b111;
+}
+
 // 8bit instructions 
 uint8_t CPU::GetRegisterValue(Instruction instruction) {
-    // Mask opcode with binary masking
-    uint8_t srcIndex = instruction.opcode & 0b111;
+    uint8_t srcIndex = GetRegister(instruction);
 
     // Check the lookup table through the earlier index
     uint8_t* src = registerLookup[srcIndex];
@@ -338,6 +349,34 @@ CPU::CounterAction CPU::CP_A_R(Instruction instruction) {
     FN = 1;
     FH = ((oldA & 0xF) - (value & 0xF)) < 0xF; // Check if underflow from bit 4 lower (half borrow)
     FC = oldA < value; // Check if underflow from bit 8
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::INC_R(Instruction instruction) {
+    uint8_t dstIndex = GetRegister(instruction);
+    uint8_t* dst = registerLookup[dstIndex];
+
+    uint8_t oldR = (uint8_t)dst; // Keep old R value for flags
+    dst += 1;
+
+    FZ = (dst == 0);
+    FN = 0;
+    FH = ((oldR & 0xF) + ((uint8_t)dst & 0xF)) > 0xF; // Check if overflows to bit 4 or higher (half carry)
+
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::DEC_R(Instruction instruction) {
+    uint8_t dstIndex = GetRegister(instruction);
+    uint8_t* dst = registerLookup[dstIndex];
+
+    uint8_t oldR = (uint8_t)dst; // Keep old R value for flags
+    dst -= 1;
+
+    FZ = (dst == 0);
+    FN = 1;
+    FH = ((oldR & 0xF) - ((uint8_t)dst & 0xF)) < 0xF; // Check if underflow from bit 4 lower (half borrow)
 
     return CPU::CounterAction::Advance;
 }

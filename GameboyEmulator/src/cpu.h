@@ -25,7 +25,6 @@ private:
 
 	// Registers
 	uint8_t A, B, C, D, E, H, L;
-	uint16_t BC, DE, HL;
 	// Registers loopup table (nullptr = HL)
 	uint8_t* registerLookup[8] = { &B, &C, &D, &E, &H, &L, nullptr, &A };
 
@@ -62,6 +61,7 @@ private:
 	CPU::CounterAction JR_C_N16(Instruction);
 
 	// 8bit instructions
+	uint8_t GetRegister(Instruction);
 	uint8_t GetRegisterValue(Instruction);
 
 	CPU::CounterAction ADD_A_R(Instruction);
@@ -72,6 +72,12 @@ private:
 	CPU::CounterAction XOR_A_R(Instruction);
 	CPU::CounterAction OR_A_R(Instruction);
 	CPU::CounterAction CP_A_R(Instruction);
+
+	const uint8_t EightFunctionOffset = 0x08;
+	const uint8_t EightINCStart = 0x04;
+	const uint8_t EightDECStart = 0x05;
+	CPU::CounterAction INC_R(Instruction);
+	CPU::CounterAction DEC_R(Instruction);
 
 	// Other instructions
 	CPU::CounterAction NOP(Instruction);
