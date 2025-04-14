@@ -88,6 +88,7 @@ private:
 	}
 
 	uint8_t GetInterruptFlags(std::vector<uint8_t>& memory);
+	void SetIF(uint8_t value, std::vector<uint8_t>& memory);
 
 	using OpcodeFunc = CPU::CounterAction (CPU::*)(Instruction);
 
@@ -187,6 +188,9 @@ private:
 	CPU::CounterAction UnimplementedOpcode(Instruction);
 
 	uint8_t GetBytesByOpcode(uint8_t opcode);
+
+	uint8_t vectorJumpAddresses[5] = { 0x40, 0x48, 0x50, 0x58, 0x60 };
+	void InterruptCPU(std::vector<uint8_t>& memory);
 public:
 	CPU();
 	void ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc);

@@ -169,6 +169,10 @@ uint8_t CPU::GetInterruptFlags(std::vector<uint8_t>& memory) {
     return memory[IEAddress] & memory[IFAddress];
 }
 
+void CPU::SetIF(uint8_t value, std::vector<uint8_t>& memory) {
+    memory[IFAddress] &= ~value;
+}
+
 // Load instructions
 CPU::CounterAction CPU::LD_B_N8(Instruction instruction) {
     B = instruction.L;
@@ -671,7 +675,20 @@ uint8_t CPU::GetBytesByOpcode(uint8_t opcode) {
     return instructionBytes[opcode];
 }
 
+void CPU::InterruptCPU(std::vector<uint8_t>& memory) {
+    uint8_t interruptFlags = GetInterruptFlags(memory);
+    if (IME == 0 || interruptFlags == 0) {
+        return;
+    }
+    uint8_t lsb = interruptFlags & -interruptFlags;
+    PUSH(vectorJumpAddresses[lsb], memory);
+    SetIF(lsb, memory);
+    IME = 0;
+}
+
 void CPU::ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc) {
+    InterruptCPU(memory);
+
     if (halted) {
         if (GetInterruptFlags(memory) != 0) {
             halted = false;
