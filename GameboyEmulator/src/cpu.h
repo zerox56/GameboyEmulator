@@ -121,8 +121,12 @@ private:
 	CPU::CounterAction LD_DE_N16(Instruction);
 	CPU::CounterAction LD_HL_N16(Instruction);
 	CPU::CounterAction LD_SP_N16(Instruction);
-	CPU::CounterAction LD_A_N16(Instruction);
 	CPU::CounterAction LD_N16_A(Instruction);
+	CPU::CounterAction LD_A_N16(Instruction);
+	CPU::CounterAction LDH_N8_A(Instruction);
+	CPU::CounterAction LDH_A_N8(Instruction);
+	CPU::CounterAction LDH_C_A(Instruction);
+	CPU::CounterAction LDH_A_C(Instruction);
 
 	// Jump instructions
 	CPU::CounterAction JP_N16(Instruction);

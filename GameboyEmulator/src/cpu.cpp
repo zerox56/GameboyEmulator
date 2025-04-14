@@ -169,12 +169,16 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
     table[0xDC] = &CPU::CALL_C_N16;
 
     // 0xE0–0xEF
+    table[0xD0] = &CPU::LDH_N8_A;
+    table[0xD2] = &CPU::LDH_C_A;
     table[0xE1] = &CPU::POP_HL;
     table[0xE5] = &CPU::PUSH_HL;
     table[0xEA] = &CPU::LD_N16_A;
 
     // 0xF0–0xFF
+    table[0xF0] = &CPU::LDH_A_N8;
     table[0xF1] = &CPU::POP_AF;
+    table[0xF2] = &CPU::LDH_A_C;
     table[0xF3] = &CPU::DI;
     table[0xF5] = &CPU::PUSH_AF;
     table[0xFA] = &CPU::LD_A_N16;
@@ -315,15 +319,35 @@ CPU::CounterAction CPU::LD_SP_N16(Instruction instruction) {
     return CPU::CounterAction::Advance;
 }
 
+CPU::CounterAction CPU::LD_N16_A(Instruction instruction) {
+    uint16_t N16 = (instruction.H << 8) | instruction.L;;
+    instruction.memory[N16] = A;
+    return CPU::CounterAction::Advance;
+}
+
 CPU::CounterAction CPU::LD_A_N16(Instruction instruction) {
     uint16_t N16 = (instruction.H << 8) | instruction.L;;
     A = instruction.memory[N16];
     return CPU::CounterAction::Advance;
 }
 
-CPU::CounterAction CPU::LD_N16_A(Instruction instruction) {
-    uint16_t N16 = (instruction.H << 8) | instruction.L;;
-    instruction.memory[N16] = A;
+CPU::CounterAction CPU::LDH_N8_A(Instruction instruction) {
+    instruction.memory[instruction.L] = A;
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LDH_A_N8(Instruction instruction) {
+    A = instruction.memory[instruction.L];
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LDH_C_A(Instruction instruction) {
+    instruction.memory[0xFF00 + C] = A;
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LDH_A_C(Instruction instruction) {
+    A = instruction.memory[0xFF00 + C];
     return CPU::CounterAction::Advance;
 }
 
