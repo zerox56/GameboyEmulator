@@ -790,11 +790,11 @@ void CPU::ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc) {
 
     printf("PC: 0x%04X | Opcode: %02X\n", pc, instruction.opcode);
 
-    uint8_t instructionBtyes = GetBytesByOpcode(instruction.opcode);
-    if (instructionBtyes >= 2) {
+    uint8_t instructionBytes = GetBytesByOpcode(instruction.opcode);
+    if (instructionBytes >= 2) {
         instruction.L = memory[pc + 1];
     }
-    if (instructionBtyes == 3) {;
+    if (instructionBytes == 3) {;
         instruction.H = memory[pc + 2];
     }
 
