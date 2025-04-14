@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <vector>
+#include <map>
 
 class CPU { 
 private:
@@ -189,7 +190,7 @@ private:
 
 	uint8_t GetBytesByOpcode(uint8_t opcode);
 
-	uint8_t vectorJumpAddresses[5] = { 0x40, 0x48, 0x50, 0x58, 0x60 };
+	static const std::map<uint8_t, uint8_t> vectorJumps;
 	void InterruptCPU(std::vector<uint8_t>& memory);
 public:
 	CPU();

@@ -38,6 +38,10 @@ const std::vector<uint8_t> CPU::instructionBytes{
     2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 3, 1
 };
 
+const std::map<uint8_t, uint8_t> CPU::vectorJumps {
+    { 0x01, 0x40 }, { 0x02, 0x48 }, { 0x04, 0x50 }, { 0x08, 0x58 }, { 0x10, 0x60 },
+};
+
 CPU::CPU() : opcodeTable(InitializeOpcodeTable()) {}
 
 std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
@@ -681,7 +685,7 @@ void CPU::InterruptCPU(std::vector<uint8_t>& memory) {
         return;
     }
     uint8_t lsb = interruptFlags & -interruptFlags;
-    PUSH(vectorJumpAddresses[lsb], memory);
+    PUSH(vectorJumps.at(lsb), memory);
     SetIF(lsb, memory);
     IME = 0;
 }
