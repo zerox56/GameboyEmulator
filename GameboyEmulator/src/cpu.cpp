@@ -848,7 +848,7 @@ void CPU::ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc) {
         case CPU::CounterAction::Advance:
         case CPU::CounterAction::AdvanceSkipIME:
         default:
-            pc += instructionBtyes;
+            pc += instructionBytes;
             break;
         case CPU::CounterAction::Jump:
         case CPU::CounterAction::Wait:
