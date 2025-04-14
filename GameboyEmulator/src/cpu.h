@@ -109,6 +109,18 @@ private:
 	CPU::CounterAction LD_H_N8(Instruction);
 	CPU::CounterAction LD_L_N8(Instruction);
 	CPU::CounterAction LD_R_R(Instruction);
+	CPU::CounterAction LD_BC_A(Instruction);
+	CPU::CounterAction LD_DE_A(Instruction);
+	CPU::CounterAction LD_A_BC(Instruction);
+	CPU::CounterAction LD_A_DE(Instruction);
+	CPU::CounterAction LD_INC_HL_A(Instruction);
+	CPU::CounterAction LD_DEC_HL_A(Instruction);
+	CPU::CounterAction LD_A_INC_HL(Instruction);
+	CPU::CounterAction LD_A_DEC_HL(Instruction);
+	CPU::CounterAction LD_BC_N16(Instruction);
+	CPU::CounterAction LD_DE_N16(Instruction);
+	CPU::CounterAction LD_HL_N16(Instruction);
+	CPU::CounterAction LD_SP_N16(Instruction);
 
 	// Jump instructions
 	CPU::CounterAction JP_N16(Instruction);

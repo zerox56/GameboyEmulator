@@ -107,30 +107,42 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
 
     // 0x00–0x0F
     table[0x00] = &CPU::NOP;
+    table[0x01] = &CPU::LD_BC_N16;
+    table[0x02] = &CPU::LD_BC_A;
     table[0x03] = &CPU::INC_BC;
     table[0x06] = &CPU::LD_B_N8;
+    table[0x0A] = &CPU::LD_A_BC;
     table[0x0B] = &CPU::DEC_BC;
     table[0x0E] = &CPU::LD_C_N8;
 
     // 0x10–0x1F
-    table[0x16] = &CPU::LD_D_N8;
+    table[0x11] = &CPU::LD_DE_N16;
+    table[0x12] = &CPU::LD_DE_A;
     table[0x13] = &CPU::INC_DE;
+    table[0x16] = &CPU::LD_D_N8;
     table[0x18] = &CPU::JR_N16;
+    table[0x1A] = &CPU::LD_A_DE;
     table[0x1B] = &CPU::DEC_DE;
     table[0x1E] = &CPU::LD_E_N8;
 
     // 0x20–0x2F
     table[0x20] = &CPU::JR_NZ_N16;
+    table[0x21] = &CPU::LD_HL_N16;
+    table[0x22] = &CPU::LD_INC_HL_A;
     table[0x23] = &CPU::INC_HL;
     table[0x26] = &CPU::LD_H_N8;
     table[0x28] = &CPU::JR_Z_N16;
+    table[0x2A] = &CPU::LD_A_INC_HL;
     table[0x2B] = &CPU::DEC_HL;
     table[0x2E] = &CPU::LD_L_N8;
 
     // 0x30–0x3F
     table[0x30] = &CPU::JR_NC_N16;
+    table[0x31] = &CPU::LD_SP_N16;
+    table[0x32] = &CPU::LD_DEC_HL_A;
     table[0x33] = &CPU::INC_SP;
     table[0x38] = &CPU::JR_C_N16;
+    table[0x3A] = &CPU::LD_A_DEC_HL;
     table[0x3B] = &CPU::DEC_SP;
 
     // 0x70–0x7F
@@ -227,6 +239,77 @@ CPU::CounterAction CPU::LD_R_R(Instruction instruction) {
         *dst = *src;
     }
 
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_BC_A(Instruction instruction) {
+    SetBC(instruction.memory[A]);
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_DE_A(Instruction instruction) {
+    SetDE(instruction.memory[A]);
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_A_BC(Instruction instruction) {
+    uint16_t BC = GetBC();
+    A = instruction.memory[BC];
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_A_DE(Instruction instruction) {
+    uint16_t DE = GetDE();
+    A = instruction.memory[DE];
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_INC_HL_A(Instruction instruction) {
+    uint16_t HL = GetHL();
+    instruction.memory[HL++] = A;
+    SetHL(++HL);
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_DEC_HL_A(Instruction instruction) {
+    uint16_t HL = GetHL();
+    instruction.memory[HL--] = A;
+    SetHL(--HL);
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_A_INC_HL(Instruction instruction) {
+    uint16_t HL = GetHL();
+    A = instruction.memory[HL];
+    SetHL(++HL);
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_A_DEC_HL(Instruction instruction) {
+    uint16_t HL = GetHL();
+    A = instruction.memory[HL];
+    SetHL(--HL);
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_BC_N16(Instruction instruction) {
+    SetBC((instruction.H << 8) | instruction.L);
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_DE_N16(Instruction instruction) {
+    SetDE((instruction.H << 8) | instruction.L);
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_HL_N16(Instruction instruction) {
+    uint16_t HL = GetHL();
+    instruction.memory[HL] = (instruction.H << 8) | instruction.L;;
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::LD_SP_N16(Instruction instruction) {
+    SP = (instruction.H << 8) | instruction.L;;
     return CPU::CounterAction::Advance;
 }
 
