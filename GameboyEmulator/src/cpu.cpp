@@ -149,6 +149,7 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
     table[0xD4] = &CPU::CALL_NC_N16;
     table[0xD5] = &CPU::PUSH_DE;
     table[0xD8] = &CPU::RET_C;
+    table[0xD9] = &CPU::RETI;
     table[0xDC] = &CPU::CALL_C_N16;
 
     // 0xE0–0xEF
@@ -339,6 +340,12 @@ CPU::CounterAction CPU::RET_NC(Instruction instruction) {
 
 CPU::CounterAction CPU::RET_C(Instruction instruction) {
     return FC == 1 ? RET(instruction) : CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::RETI(Instruction instruction) {
+    instruction.pc = POP(instruction.memory);
+    pendingIME = true;
+    return CPU::CounterAction::AdvanceSkipIME;
 }
 
 // 8bit instructions 

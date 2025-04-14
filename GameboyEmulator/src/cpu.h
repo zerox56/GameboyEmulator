@@ -131,6 +131,7 @@ private:
 	CPU::CounterAction RET_Z(Instruction);
 	CPU::CounterAction RET_NC(Instruction);
 	CPU::CounterAction RET_C(Instruction);
+	CPU::CounterAction RETI(Instruction);
 
 	// 8bit instructions
 	uint8_t GetRegister(Instruction);
