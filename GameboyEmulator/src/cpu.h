@@ -25,6 +25,7 @@ private:
 
 	// Registers
 	uint8_t A, B, C, D, E, H, L;
+	uint16_t SP = 0xFFFE; // Stack pointer
 	// Registers loopup table (nullptr = HL)
 	uint8_t* registerLookup[8] = { &B, &C, &D, &E, &H, &L, nullptr, &A };
 	// Registers pair functions
@@ -128,9 +129,24 @@ private:
 	CPU::CounterAction INC_BC(Instruction);
 	CPU::CounterAction INC_DE(Instruction);
 	CPU::CounterAction INC_HL(Instruction);
+	CPU::CounterAction INC_SP(Instruction);
 	CPU::CounterAction DEC_BC(Instruction);
 	CPU::CounterAction DEC_DE(Instruction);
 	CPU::CounterAction DEC_HL(Instruction);
+	CPU::CounterAction DEC_SP(Instruction);
+
+	// Stack instructions
+	void PUSH(uint16_t value, std::vector<uint8_t>& memory);
+	uint16_t POP(std::vector<uint8_t>& memory);
+
+	CPU::CounterAction PUSH_BC(Instruction);
+	CPU::CounterAction POP_BC(Instruction);
+	CPU::CounterAction PUSH_DE(Instruction);
+	CPU::CounterAction POP_DE(Instruction);
+	CPU::CounterAction PUSH_HL(Instruction);
+	CPU::CounterAction POP_HL(Instruction);
+	CPU::CounterAction PUSH_AF(Instruction);
+	CPU::CounterAction POP_AF(Instruction);
 
 	// Other instructions
 	CPU::CounterAction NOP(Instruction);

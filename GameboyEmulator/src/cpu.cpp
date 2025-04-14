@@ -117,10 +117,28 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
     table[0x2B] = &CPU::DEC_HL;
     table[0x2E] = &CPU::LD_L_N8;
 
+    // 0x30–0x3F
+    table[0x33] = &CPU::INC_SP;
+    table[0x3B] = &CPU::DEC_SP;
+
     // 0xC0–0xCF
-    table[0x30] = &CPU::JR_NC_N16;
-    table[0x38] = &CPU::JR_C_N16;
+    table[0xC0] = &CPU::JR_NC_N16;
+    table[0xC1] = &CPU::POP_BC;
+    table[0xC5] = &CPU::PUSH_BC;
+    table[0xC8] = &CPU::JR_C_N16;
     table[0xC3] = &CPU::JP_N16;
+
+    // 0xD0–0xDF
+    table[0xD1] = &CPU::POP_DE;
+    table[0xD5] = &CPU::PUSH_DE;
+
+    // 0xE0–0xEF
+    table[0xE1] = &CPU::POP_HL;
+    table[0xE5] = &CPU::PUSH_HL;
+
+    // 0xF0–0xFF
+    table[0xF1] = &CPU::POP_AF;
+    table[0xF5] = &CPU::PUSH_AF;
 
     return table;
 }
@@ -429,6 +447,11 @@ CPU::CounterAction CPU::INC_HL(Instruction instruction) {
     return CPU::CounterAction::Advance;
 }
 
+CPU::CounterAction CPU::INC_SP(Instruction instruction) {
+    SP++;
+    return CPU::CounterAction::Advance;
+}
+
 CPU::CounterAction CPU::DEC_BC(Instruction instruction) {
     uint16_t BC = GetBC();
     SetBC(--BC);
@@ -447,6 +470,63 @@ CPU::CounterAction CPU::DEC_HL(Instruction instruction) {
     uint16_t HL = GetHL();
     SetHL(--HL);
 
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::DEC_SP(Instruction instruction) {
+    SP--;
+    return CPU::CounterAction::Advance;
+}
+
+// Stack instructions
+void CPU::PUSH(uint16_t value, std::vector<uint8_t>& memory) {
+    memory[--SP] = value >> 8;
+    memory[--SP] = value & 0xFF;
+}
+
+uint16_t CPU::POP(std::vector<uint8_t>& memory) {
+    uint8_t low = memory[SP++];
+    uint8_t high = memory[SP++];
+    return (high << 8) | low;
+}
+
+CPU::CounterAction CPU::PUSH_BC(Instruction instruction) {
+    PUSH(GetBC(), instruction.memory);
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::POP_BC(Instruction instruction) {
+    SetBC(POP(instruction.memory));
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::PUSH_DE(Instruction instruction) {
+    PUSH(GetHL(), instruction.memory);
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::POP_DE(Instruction instruction) {
+    SetHL(POP(instruction.memory));
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::PUSH_HL(Instruction instruction) {
+    PUSH(GetHL(), instruction.memory);
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::POP_HL(Instruction instruction) {
+    SetHL(POP(instruction.memory));
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::PUSH_AF(Instruction instruction) {
+    PUSH(GetAF(), instruction.memory);
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::POP_AF(Instruction instruction) {
+    SetAF(POP(instruction.memory));
     return CPU::CounterAction::Advance;
 }
 
