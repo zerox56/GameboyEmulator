@@ -118,19 +118,29 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
     table[0x2E] = &CPU::LD_L_N8;
 
     // 0x30–0x3F
+    table[0x30] = &CPU::JR_NC_N16;
     table[0x33] = &CPU::INC_SP;
+    table[0x38] = &CPU::JR_C_N16;
     table[0x3B] = &CPU::DEC_SP;
 
     // 0xC0–0xCF
-    table[0xC0] = &CPU::JR_NC_N16;
+    table[0xC0] = &CPU::RET_NZ;
     table[0xC1] = &CPU::POP_BC;
-    table[0xC5] = &CPU::PUSH_BC;
-    table[0xC8] = &CPU::JR_C_N16;
     table[0xC3] = &CPU::JP_N16;
+    table[0xC4] = &CPU::CALL_NZ_N16;
+    table[0xC5] = &CPU::PUSH_BC;
+    table[0xC8] = &CPU::RET_Z;
+    table[0xC9] = &CPU::RET;
+    table[0xCC] = &CPU::CALL_Z_N16;
+    table[0xCD] = &CPU::CALL_N16;
 
     // 0xD0–0xDF
+    table[0xD0] = &CPU::RET_NC;
     table[0xD1] = &CPU::POP_DE;
+    table[0xD4] = &CPU::CALL_NC_N16;
     table[0xD5] = &CPU::PUSH_DE;
+    table[0xD8] = &CPU::RET_C;
+    table[0xDC] = &CPU::CALL_C_N16;
 
     // 0xE0–0xEF
     table[0xE1] = &CPU::POP_HL;
@@ -197,7 +207,12 @@ CPU::CounterAction CPU::LD_R_R(Instruction instruction) {
 }
 
 // Jump instructions
-CPU::CounterAction CPU::JumpRelative(Instruction instruction) {
+CPU::CounterAction CPU::JP_N16(Instruction instruction) {
+    instruction.pc = (instruction.H << 8) | instruction.L;
+    return CPU::CounterAction::Jump;
+}
+
+CPU::CounterAction CPU::JR_N16(Instruction instruction) {
     if (instruction.H == 0x00) {
         return CPU::CounterAction::Advance;
     }
@@ -207,37 +222,72 @@ CPU::CounterAction CPU::JumpRelative(Instruction instruction) {
     return CPU::CounterAction::Jump;
 }
 
-CPU::CounterAction CPU::JP_N16(Instruction instruction) {
-    instruction.pc = (instruction.H << 8) | instruction.L;
-    return CPU::CounterAction::Jump;
-}
-
-CPU::CounterAction CPU::JR_N16(Instruction instruction) {
-    return JumpRelative(instruction);
-}
-
 CPU::CounterAction CPU::JR_NZ_N16(Instruction instruction) {
-    return FZ == 0 ? JumpRelative(instruction) : CPU::CounterAction::Advance;
+    return FZ == 0 ? JR_N16(instruction) : CPU::CounterAction::Advance;
 }
 
 CPU::CounterAction CPU::JR_Z_N16(Instruction instruction) {
-    return FZ == 1 ? JumpRelative(instruction) : CPU::CounterAction::Advance;
+    return FZ == 1 ? JR_N16(instruction) : CPU::CounterAction::Advance;
 }
 
 CPU::CounterAction CPU::JR_NC_N16(Instruction instruction) {
-    return FC == 0 ? JumpRelative(instruction) : CPU::CounterAction::Advance;
+    return FC == 0 ? JR_N16(instruction) : CPU::CounterAction::Advance;
 }
 
 CPU::CounterAction CPU::JR_C_N16(Instruction instruction) {
-    return FC == 1 ? JumpRelative(instruction) : CPU::CounterAction::Advance;
+    return FC == 1 ? JR_N16(instruction) : CPU::CounterAction::Advance;
 }
 
+// Subroutine instructions
+CPU::CounterAction CPU::CALL_N16(Instruction instruction) {
+    uint16_t returnAddress = instruction.pc + 3;
+    PUSH(returnAddress, instruction.memory);
+    return JP_N16(instruction);
+}
+
+CPU::CounterAction CPU::CALL_NZ_N16(Instruction instruction) {
+    return FZ == 0 ? CALL_N16(instruction) : CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::CALL_Z_N16(Instruction instruction) {
+    return FZ == 1 ? CALL_N16(instruction) : CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::CALL_NC_N16(Instruction instruction) {
+    return FC == 0 ? CALL_N16(instruction) : CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::CALL_C_N16(Instruction instruction) {
+    return FC == 1 ? CALL_N16(instruction) : CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::RET(Instruction instruction) {
+    instruction.pc = POP(instruction.memory);
+    return CPU::CounterAction::Wait;
+}
+
+CPU::CounterAction CPU::RET_NZ(Instruction instruction) {
+    return FZ == 0 ? RET(instruction) : CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::RET_Z(Instruction instruction) {
+    return FZ == 1 ? RET(instruction) : CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::RET_NC(Instruction instruction) {
+    return FC == 0 ? RET(instruction) : CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::RET_C(Instruction instruction) {
+    return FC == 1 ? RET(instruction) : CPU::CounterAction::Advance;
+}
+
+// 8bit instructions 
 uint8_t CPU::GetRegister(Instruction instruction) {
     // Mask opcode with binary masking
     return instruction.opcode & 0b111;
 }
 
-// 8bit instructions 
 uint8_t CPU::GetRegisterValue(Instruction instruction) {
     uint8_t srcIndex = GetRegister(instruction);
 
@@ -567,6 +617,7 @@ void CPU::ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc) {
             pc += instructionBtyes;
             break;
         case CPU::CounterAction::Jump:
+        case CPU::CounterAction::Wait:
             break;
     }
 

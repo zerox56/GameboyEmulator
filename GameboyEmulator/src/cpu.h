@@ -6,7 +6,8 @@ class CPU {
 private:
 	enum class CounterAction {
 		Advance,
-		Jump
+		Jump,
+		Wait
 	};
 
 	struct Instruction {
@@ -97,14 +98,24 @@ private:
 	CPU::CounterAction LD_R_R(Instruction);
 
 	// Jump instructions
-	CPU::CounterAction JumpRelative(Instruction);
-
 	CPU::CounterAction JP_N16(Instruction);
 	CPU::CounterAction JR_N16(Instruction);
 	CPU::CounterAction JR_NZ_N16(Instruction);
 	CPU::CounterAction JR_Z_N16(Instruction);
 	CPU::CounterAction JR_NC_N16(Instruction);
 	CPU::CounterAction JR_C_N16(Instruction);
+
+	// Subroutine instructions
+	CPU::CounterAction CALL_N16(Instruction);
+	CPU::CounterAction CALL_NZ_N16(Instruction);
+	CPU::CounterAction CALL_Z_N16(Instruction);
+	CPU::CounterAction CALL_NC_N16(Instruction);
+	CPU::CounterAction CALL_C_N16(Instruction);
+	CPU::CounterAction RET(Instruction);
+	CPU::CounterAction RET_NZ(Instruction);
+	CPU::CounterAction RET_Z(Instruction);
+	CPU::CounterAction RET_NC(Instruction);
+	CPU::CounterAction RET_C(Instruction);
 
 	// 8bit instructions
 	uint8_t GetRegister(Instruction);
