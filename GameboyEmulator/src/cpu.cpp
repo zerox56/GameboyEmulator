@@ -95,6 +95,12 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
         opcodeTable[EightDECStart + offset] = &CPU::DEC_R;
     }
 
+    // RST functions
+    for (uint8_t index = 0; index < 8; index++) {
+        uint8_t offset = RSTOffset * index;
+        opcodeTable[RSTStart + offset] = &CPU::RST;
+    }
+
     // 0x00–0x0F
     table[0x00] = &CPU::NOP;
     table[0x03] = &CPU::INC_BC;
@@ -123,6 +129,9 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
     table[0x38] = &CPU::JR_C_N16;
     table[0x3B] = &CPU::DEC_SP;
 
+    // 0x70–0x7F
+    table[0x76] = &CPU::HALT;
+
     // 0xC0–0xCF
     table[0xC0] = &CPU::RET_NZ;
     table[0xC1] = &CPU::POP_BC;
@@ -148,9 +157,15 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
 
     // 0xF0–0xFF
     table[0xF1] = &CPU::POP_AF;
+    table[0xF3] = &CPU::DI;
     table[0xF5] = &CPU::PUSH_AF;
+    table[0xFB] = &CPU::EI;
 
     return table;
+}
+
+uint8_t CPU::GetInterruptFlags(std::vector<uint8_t>& memory) {
+    return memory[IEAddress] & memory[IFAddress];
 }
 
 // Load instructions
@@ -236,6 +251,50 @@ CPU::CounterAction CPU::JR_NC_N16(Instruction instruction) {
 
 CPU::CounterAction CPU::JR_C_N16(Instruction instruction) {
     return FC == 1 ? JR_N16(instruction) : CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::RST(Instruction instruction) {
+    uint16_t returnAddress = instruction.pc + 1;
+    PUSH(returnAddress, instruction.memory);
+
+    // TODO: Check if more clever way to do this later.
+    switch (instruction.opcode) {
+        case 0xC7:
+            instruction.pc = 0x00;
+            break;
+        case 0xCF:
+            instruction.pc = 0x08;
+            break;
+        case 0xD7:
+            instruction.pc = 0x10;
+            break;
+        case 0xDF:
+            instruction.pc = 0x18;
+            break;
+        case 0xE7:
+            instruction.pc = 0x20;
+            break;
+        case 0xEF:
+            instruction.pc = 0x28;
+            break;
+        case 0xF7:
+            instruction.pc = 0x30;
+            break;
+        case 0xFF:
+            instruction.pc = 0x38;
+            break;
+    }
+    return CPU::CounterAction::Jump;
+}
+
+CPU::CounterAction CPU::DI(Instruction instruction) {
+    IME = 0;
+    return CPU::CounterAction::Advance;
+}
+
+CPU::CounterAction CPU::EI(Instruction instruction) {
+    pendingIME = true;
+    return CPU::CounterAction::AdvanceSkipIME;
 }
 
 // Subroutine instructions
@@ -580,6 +639,17 @@ CPU::CounterAction CPU::POP_AF(Instruction instruction) {
     return CPU::CounterAction::Advance;
 }
 
+// Interrupt functions
+CPU::CounterAction CPU::HALT(Instruction instruction) {
+    if (IME == 1 || IME == 0 && GetInterruptFlags(instruction.memory) == 0) {
+        halted = true;
+        return CPU::CounterAction::Advance;
+    }
+    else {
+        return CPU::CounterAction::Advance;
+    }
+}
+
 // Other instructions
 CPU::CounterAction CPU::NOP(Instruction) {
     return CPU::CounterAction::Advance;
@@ -595,6 +665,15 @@ uint8_t CPU::GetBytesByOpcode(uint8_t opcode) {
 }
 
 void CPU::ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc) {
+    if (halted) {
+        if (GetInterruptFlags(memory) != 0) {
+            halted = false;
+        }
+        else {
+            return;
+        }
+    }
+
     Instruction instruction(memory, pc);
     instruction.opcode = memory[pc];
 
@@ -610,9 +689,15 @@ void CPU::ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc) {
 
     CPU::CounterAction action = (this->*opcodeTable[instruction.opcode])(instruction);
 
+    if (action != CPU::CounterAction::AdvanceSkipIME && pendingIME) {
+        IME = 1;
+        pendingIME = false;
+    }
+
     switch (action)
     {
         case CPU::CounterAction::Advance:
+        case CPU::CounterAction::AdvanceSkipIME:
         default:
             pc += instructionBtyes;
             break;

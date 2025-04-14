@@ -6,6 +6,7 @@ class CPU {
 private:
 	enum class CounterAction {
 		Advance,
+		AdvanceSkipIME,
 		Jump,
 		Wait
 	};
@@ -24,9 +25,15 @@ private:
 	uint8_t debugCycleMax = 5;
 	uint8_t debugCycleCurrent = 5;
 
+	// CPU
+	bool pendingIME = false; // Pending variable to turn on IME after next instruction
+	bool halted = false; // Halts Executions
+
 	// Registers
 	uint8_t A, B, C, D, E, H, L;
 	uint16_t SP = 0xFFFE; // Stack pointer
+
+	bool IME; // Interrupt Master Enable
 	// Registers loopup table (nullptr = HL)
 	uint8_t* registerLookup[8] = { &B, &C, &D, &E, &H, &L, nullptr, &A };
 	// Registers pair functions
@@ -65,6 +72,8 @@ private:
 
 	// Flags
 	uint8_t FZ, FN, FH, FC;
+	uint8_t IEAddress = 0xFFFF; // Interrupt Enable
+	uint8_t IFAddress = 0xFF0F; // Interrupt Flag
 
 	// Flags functions
 	uint8_t GetFlags() const {
@@ -77,6 +86,8 @@ private:
 		FH = (F >> 5) & 1;
 		FC = (F >> 4) & 1;
 	}
+
+	uint8_t GetInterruptFlags(std::vector<uint8_t>& memory);
 
 	using OpcodeFunc = CPU::CounterAction (CPU::*)(Instruction);
 
@@ -104,6 +115,10 @@ private:
 	CPU::CounterAction JR_Z_N16(Instruction);
 	CPU::CounterAction JR_NC_N16(Instruction);
 	CPU::CounterAction JR_C_N16(Instruction);
+
+	const uint8_t RSTOffset = 0x08;
+	const uint8_t RSTStart = 0xC7;
+	CPU::CounterAction RST(Instruction);
 
 	// Subroutine instructions
 	CPU::CounterAction CALL_N16(Instruction);
@@ -158,6 +173,11 @@ private:
 	CPU::CounterAction POP_HL(Instruction);
 	CPU::CounterAction PUSH_AF(Instruction);
 	CPU::CounterAction POP_AF(Instruction);
+
+	// Interrupt functions
+	CPU::CounterAction HALT(Instruction);
+	CPU::CounterAction DI(Instruction);
+	CPU::CounterAction EI(Instruction);
 
 	// Other instructions
 	CPU::CounterAction NOP(Instruction);
