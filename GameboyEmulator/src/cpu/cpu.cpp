@@ -146,6 +146,7 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
     table[0x2A] = CPULoad::LD_A_INC_HL;
     table[0x2B] = CPU16BitArithmetic::DEC_HL;
     table[0x2E] = CPULoad::LD_L_N8;
+    table[0x2F] = CPU8BitArithmetic::CPL;
 
     // 0x30–0x3F
     table[0x30] = CPUJump::JR_NC_N16;

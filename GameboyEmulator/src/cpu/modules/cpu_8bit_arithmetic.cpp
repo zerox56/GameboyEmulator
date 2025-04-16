@@ -128,4 +128,13 @@ namespace CPU8BitArithmetic {
 
         return CPU::CounterAction::Advance;
     }
+
+    CPU::CounterAction CPL(CPU& cpu, CPU::Instruction) {
+        cpu.state.A = ~cpu.state.A;
+
+        CPUHelper::UpdateFlags(cpu, 0, 0, CPUHelper::FlagsType::None, CPUHelper::FlagsType::True,
+            CPUHelper::FlagsType::True, CPUHelper::FlagsType::None);
+
+        return CPU::CounterAction::Advance;
+    }
 }

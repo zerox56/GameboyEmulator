@@ -19,4 +19,6 @@ namespace CPU8BitArithmetic {
 	const uint8_t EightDECStart = 0x05;
 	CPU::CounterAction INC_R(CPU&, CPU::Instruction);
 	CPU::CounterAction DEC_R(CPU&, CPU::Instruction);
+
+	CPU::CounterAction CPL(CPU&, CPU::Instruction);
 };
