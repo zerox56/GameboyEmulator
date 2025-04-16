@@ -7,6 +7,7 @@ struct CPUState {
 	uint8_t A, B, C, D, E, H, L;
 	// 8bit registers loopup table (nullptr = HL)
 	std::vector<uint8_t*> registerLookup = { &B, &C, &D, &E, &H, &L, nullptr, &A };
+	uint8_t HLIndex = 0x06;
 
 	// Stack pointer
 	uint16_t SP = 0xFFFE;
@@ -19,7 +20,7 @@ struct CPUState {
 	bool IME; 
 
 	// Flags
-	uint8_t FZ, FN, FH, FC;
+	bool FZ, FN, FH, FC;
 	// Interrupt Enable
 	uint8_t IEAddress = 0xFFFF; 
 	// Interrupt Flag
