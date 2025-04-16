@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -127,13 +127,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\cpu.cpp" />
+    <ClCompile Include="src\cpu\cpu.cpp" />
+    <ClCompile Include="src\cpu\cpu_helper.cpp" />
+    <ClCompile Include="src\cpu\cpu_helper.h" />
+    <ClCompile Include="src\cpu\modules\cpu_16bit_arithmetic.cpp" />
+    <ClCompile Include="src\cpu\modules\cpu_8bit_arithmetic.cpp" />
+    <ClCompile Include="src\cpu\modules\cpu_interrupt.cpp" />
+    <ClCompile Include="src\cpu\modules\cpu_jump.cpp" />
+    <ClCompile Include="src\cpu\modules\cpu_load.cpp" />
+    <ClCompile Include="src\cpu\modules\cpu_misc.cpp" />
+    <ClCompile Include="src\cpu\modules\cpu_stack.cpp" />
     <ClCompile Include="src\emulator.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\cpu.h" />
+    <ClInclude Include="src\cpu\cpu.h" />
+    <ClInclude Include="src\cpu\modules\cpu_16bit_arithmetic.h" />
+    <ClInclude Include="src\cpu\modules\cpu_8bit_arithmetic.h" />
+    <ClInclude Include="src\cpu\modules\cpu_interrupt.h" />
+    <ClInclude Include="src\cpu\modules\cpu_jump.h" />
+    <ClInclude Include="src\cpu\modules\cpu_load.h" />
+    <ClInclude Include="src\cpu\modules\cpu_misc.h" />
+    <ClInclude Include="src\cpu\modules\cpu_stack.h" />
     <ClInclude Include="src\emulator.h" />
+    <ClInclude Include="src\cpu\cpu_state.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,5 @@
 #include "emulator.h"
-#include "cpu.h"
+#include "cpu/cpu.h"
 
 #include <cstdint>
 #include <fstream>
