@@ -8,6 +8,8 @@ namespace CPULoad {
 	CPU::CounterAction LD_E_N8(CPU&, CPU::Instruction);
 	CPU::CounterAction LD_H_N8(CPU&, CPU::Instruction);
 	CPU::CounterAction LD_L_N8(CPU&, CPU::Instruction);
+	CPU::CounterAction LD_HL_N8(CPU&, CPU::Instruction);
+	CPU::CounterAction LD_A_N8(CPU&, CPU::Instruction);
 	CPU::CounterAction LD_R_R(CPU&, CPU::Instruction);
 	CPU::CounterAction LD_BC_A(CPU&, CPU::Instruction);
 	CPU::CounterAction LD_DE_A(CPU&, CPU::Instruction);

@@ -74,6 +74,9 @@ namespace CPUHelper {
                 // Check if borrow from oldValue < value
                 flag = oldValue < value;
                 break;
+            case FlagsType::Invert:
+                flag = !flag;
+                break;
             case FlagsType::None:
             default:
                 break;

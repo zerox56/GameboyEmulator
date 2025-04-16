@@ -2,6 +2,7 @@
 #include "modules/cpu_8bit_arithmetic.h"
 #include "modules/cpu_16bit_arithmetic.h"
 #include "modules/cpu_bit_shift.h"
+#include "modules/cpu_carry_flag.h"
 #include "modules/cpu_interrupt.h"
 #include "modules/cpu_jump.h"
 #include "modules/cpu_load.h"
@@ -140,6 +141,7 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
     table[0x22] = CPULoad::LD_INC_HL_A;
     table[0x23] = CPU16BitArithmetic::INC_HL;
     table[0x26] = CPULoad::LD_H_N8;
+    table[0x27] = CPUMisc::DAA;
     table[0x28] = CPUJump::JR_Z_N16;
     table[0x2A] = CPULoad::LD_A_INC_HL;
     table[0x2B] = CPU16BitArithmetic::DEC_HL;
@@ -150,9 +152,13 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
     table[0x31] = CPULoad::LD_SP_N16;
     table[0x32] = CPULoad::LD_DEC_HL_A;
     table[0x33] = CPU16BitArithmetic::INC_SP;
+    table[0x36] = CPULoad::LD_HL_N8;
+    table[0x37] = CPUCarryFlag::SCF;
     table[0x38] = CPUJump::JR_C_N16;
     table[0x3A] = CPULoad::LD_A_DEC_HL;
     table[0x3B] = CPU16BitArithmetic::DEC_SP;
+    table[0x3E] = CPULoad::LD_A_N8;
+    table[0x3F] = CPUCarryFlag::CCF;
 
     // 0x70–0x7F
     table[0x76] = CPUInterrupt::HALT;

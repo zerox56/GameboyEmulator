@@ -25,6 +25,7 @@ namespace CPUHelper {
 		OverflowBit7,
 		BorrowBit4,
 		BorrowBit7,
+		Invert,
 		None
 	};
 	void UpdateFlag(uint8_t value, uint8_t oldValue, FlagsType flagType, bool& flag);

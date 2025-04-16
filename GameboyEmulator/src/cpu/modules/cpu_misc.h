@@ -3,4 +3,5 @@
 
 namespace CPUMisc {
 	CPU::CounterAction NOP(CPU&, CPU::Instruction);
+	CPU::CounterAction DAA(CPU&, CPU::Instruction);
 };

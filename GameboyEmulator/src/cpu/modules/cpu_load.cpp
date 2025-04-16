@@ -31,6 +31,16 @@ namespace CPULoad {
         return CPU::CounterAction::Advance;
     }
 
+    CPU::CounterAction LD_HL_N8(CPU& cpu, CPU::Instruction instruction) {
+        instruction.memory[cpu.state.GetHL()] = instruction.L;
+        return CPU::CounterAction::Advance;
+    }
+
+    CPU::CounterAction LD_A_N8(CPU& cpu, CPU::Instruction instruction) {
+        cpu.state.A = instruction.L;
+        return CPU::CounterAction::Advance;
+    }
+
     CPU::CounterAction LD_R_R(CPU& cpu, CPU::Instruction instruction) {
         // Mask opcode for dst and src register
         uint8_t dstIndex = (instruction.opcode >> 3) & 0b111;
