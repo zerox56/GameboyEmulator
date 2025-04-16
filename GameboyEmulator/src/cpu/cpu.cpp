@@ -1,6 +1,7 @@
 #include "cpu.h"
 #include "modules/cpu_8bit_arithmetic.h"
 #include "modules/cpu_16bit_arithmetic.h"
+#include "modules/cpu_bit_shift.h"
 #include "modules/cpu_interrupt.h"
 #include "modules/cpu_jump.h"
 #include "modules/cpu_load.h"
@@ -164,6 +165,7 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
     table[0xC5] = CPUStack::PUSH_BC;
     table[0xC8] = CPUJump::RET_Z;
     table[0xC9] = CPUJump::RET;
+    table[0xCB] = CPUBitShift::BitShift;
     table[0xCC] = CPUJump::CALL_Z_N16;
     table[0xCD] = CPUJump::CALL_N16;
 
@@ -227,11 +229,20 @@ void CPU::ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc) {
         state.IME = 1;
         state.pendingIME = false;
     }
+    if (action == CPU::CounterAction::BitShift) {
+        Instruction bitShiftInstruction(memory, pc);
+        bitShiftInstruction.opcode = memory[++pc];
+
+        printf("BitShift: PC: 0x%04X | Opcode: %02X\n", pc, instruction.opcode);
+
+        CPUBitShift::ExecuteBitShift(*this, instruction);
+    }
 
     switch (action)
     {
         case CPU::CounterAction::Advance:
         case CPU::CounterAction::AdvanceSkipIME:
+        case CPU::CounterAction::BitShift:
         default:
             pc += instructionBytes;
             break;

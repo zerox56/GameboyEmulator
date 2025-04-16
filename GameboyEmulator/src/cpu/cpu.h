@@ -11,7 +11,8 @@ public:
 		Advance,
 		AdvanceSkipIME,
 		Jump,
-		Wait
+		Wait,
+		BitShift
 	};
 
 	struct Instruction {

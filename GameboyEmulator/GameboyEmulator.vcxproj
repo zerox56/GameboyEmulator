@@ -132,6 +132,7 @@
     <ClCompile Include="src\cpu\cpu_helper.h" />
     <ClCompile Include="src\cpu\modules\cpu_16bit_arithmetic.cpp" />
     <ClCompile Include="src\cpu\modules\cpu_8bit_arithmetic.cpp" />
+    <ClCompile Include="src\cpu\modules\cpu_bit_shift.cpp" />
     <ClCompile Include="src\cpu\modules\cpu_interrupt.cpp" />
     <ClCompile Include="src\cpu\modules\cpu_jump.cpp" />
     <ClCompile Include="src\cpu\modules\cpu_load.cpp" />
@@ -139,11 +140,13 @@
     <ClCompile Include="src\cpu\modules\cpu_stack.cpp" />
     <ClCompile Include="src\emulator.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\utils\bit_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\cpu\cpu.h" />
     <ClInclude Include="src\cpu\modules\cpu_16bit_arithmetic.h" />
     <ClInclude Include="src\cpu\modules\cpu_8bit_arithmetic.h" />
+    <ClInclude Include="src\cpu\modules\cpu_bit_shift.h" />
     <ClInclude Include="src\cpu\modules\cpu_interrupt.h" />
     <ClInclude Include="src\cpu\modules\cpu_jump.h" />
     <ClInclude Include="src\cpu\modules\cpu_load.h" />
@@ -151,6 +154,7 @@
     <ClInclude Include="src\cpu\modules\cpu_stack.h" />
     <ClInclude Include="src\emulator.h" />
     <ClInclude Include="src\cpu\cpu_state.h" />
+    <ClInclude Include="src\utils\bit_utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
