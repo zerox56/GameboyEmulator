@@ -29,6 +29,7 @@ public:
 
 	CPU();
 	void ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc);
+	void UpdateTimers(std::vector<uint8_t>& memory, uint8_t cycles);
 private:
 	// Debug
 	uint8_t debugCycleMax = 5;

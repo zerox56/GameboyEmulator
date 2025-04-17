@@ -17,6 +17,8 @@ private:
 
 	std::vector<uint8_t> memory;
 	uint16_t pc = startAddress;
+
+	uint8_t cycles = 1;
 public:
 	Emulator();
 	bool LoadRom(const char* filePath);

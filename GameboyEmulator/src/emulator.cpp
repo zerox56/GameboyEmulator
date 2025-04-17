@@ -53,4 +53,5 @@ void Emulator::Cycle() {
 	static CPU cpu;
 
 	cpu.ExecuteOpcode(memory, pc);
+	cpu.UpdateTimers(memory, cycles);
 }

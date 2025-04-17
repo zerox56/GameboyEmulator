@@ -76,7 +76,51 @@ struct CPUState {
 		return memory[IEAddress] & memory[IFAddress];
 	}
 
+	uint8_t GetIF(std::vector<uint8_t>& memory) const {
+		return memory[IFAddress];
+	}
+
 	void SetIF(uint8_t value, std::vector<uint8_t>& memory) {
+		memory[IFAddress] |= value;
+	}
+
+	void ResetIF(uint8_t value, std::vector<uint8_t>& memory) {
 		memory[IFAddress] &= ~value;
+	}
+
+	// Timers
+	// Divider
+	uint8_t DIVAddress = 0xFF04;
+	uint8_t DIVCycles = 0;
+	// Timer
+	uint8_t TIMAAddress = 0xFF05;
+	uint16_t TIMAFrequency = 0;
+	uint16_t TIMACounter = 0;
+	uint8_t TIMACycles = 0;
+	// Timer Modulo
+	uint8_t TMAAddress = 0xFF06;
+	uint8_t TMA = 0;
+	// Timer control
+	uint8_t TACAddress = 0xFF07;
+
+	// Timer functions
+	uint8_t GetDIV(std::vector<uint8_t>& memory) const {
+		return memory[DIVAddress];
+	}
+
+	void SetDIV(uint8_t value, std::vector<uint8_t>& memory) {
+		memory[DIVAddress] = value;
+	}
+
+	uint8_t GetTIMA(std::vector<uint8_t>& memory) const {
+		return memory[TIMAAddress];
+	}
+
+	void SetTIMA(uint8_t value, std::vector<uint8_t>& memory) {
+		memory[TIMAAddress] = value;
+	}
+
+	uint8_t GetTAC(std::vector<uint8_t>& memory) const {
+		return memory[TACAddress];
 	}
 };

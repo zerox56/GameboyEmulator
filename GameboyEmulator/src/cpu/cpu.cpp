@@ -8,6 +8,7 @@
 #include "modules/cpu_load.h"
 #include "modules/cpu_misc.h"
 #include "modules/cpu_stack.h"
+#include "../utils/bit_utils.h"
 
 #include <stdio.h>
 #include <memory>
@@ -265,6 +266,51 @@ void CPU::ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc) {
     }
 }
 
+void CPU::UpdateTimers(std::vector<uint8_t>& memory, uint8_t cycles) {
+    while (state.DIVCycles >= 256) {
+        uint8_t DIV = state.GetDIV(memory);
+        state.SetDIV(++DIV, memory);
+        state.DIVCycles -= 256;
+    }
+    state.DIVCycles += cycles;
+
+    uint8_t TAC = state.GetTAC(memory);
+    bool timerEnabled = (TAC >> 2) & 1;
+    if (timerEnabled) {
+        uint8_t frequency = TAC & 0x3;
+        switch (frequency) {
+            case 0b00: 
+                state.TIMAFrequency = 1024;
+                break;
+            case 0b01:
+                state.TIMAFrequency = 16;
+                break;
+            case 0b10:
+                state.TIMAFrequency = 64;
+                break;
+            case 0b11:
+                state.TIMAFrequency = 256;
+                break;
+        }
+        state.TIMACounter += cycles;
+        if (state.TIMACounter >= state.TIMAFrequency) {
+            uint8_t TIMA = state.GetTIMA(memory);
+            if (TIMA == 0xFF) {
+                TIMA = state.TMA;
+                uint8_t IF = state.GetIF(memory);
+                IF |= 0x04;
+                state.SetIF(IF, memory);
+                state.SetTIMA(TIMA, memory);
+            }
+            else {
+                state.SetTIMA(++TIMA, memory);
+            }
+            
+            state.TIMACounter -= state.TIMAFrequency;
+        }
+    }
+}
+
 uint8_t CPU::GetBytesByOpcode(uint8_t opcode) {
     return instructionBytes[opcode];
 }
@@ -274,8 +320,8 @@ void CPU::InterruptCPU(std::vector<uint8_t>& memory) {
     if (state.IME == 0 || interruptFlags == 0) {
         return;
     }
-    uint8_t lsb = interruptFlags & -interruptFlags;
+    uint8_t lsb = BitUtils::GetLSB(interruptFlags);
     CPUHelper::PUSH(vectorJumps.at(lsb), *this, memory);
-    state.SetIF(lsb, memory);
+    state.ResetIF(lsb, memory);
     state.IME = 0;
 }

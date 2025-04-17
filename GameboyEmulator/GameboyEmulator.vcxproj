@@ -133,6 +133,7 @@
     <ClCompile Include="src\cpu\modules\cpu_16bit_arithmetic.cpp" />
     <ClCompile Include="src\cpu\modules\cpu_8bit_arithmetic.cpp" />
     <ClCompile Include="src\cpu\modules\cpu_bit_shift.cpp" />
+    <ClCompile Include="src\cpu\modules\cpu_carry_flag.cpp" />
     <ClCompile Include="src\cpu\modules\cpu_interrupt.cpp" />
     <ClCompile Include="src\cpu\modules\cpu_jump.cpp" />
     <ClCompile Include="src\cpu\modules\cpu_load.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="src\cpu\modules\cpu_16bit_arithmetic.h" />
     <ClInclude Include="src\cpu\modules\cpu_8bit_arithmetic.h" />
     <ClInclude Include="src\cpu\modules\cpu_bit_shift.h" />
+    <ClInclude Include="src\cpu\modules\cpu_carry_flag.h" />
     <ClInclude Include="src\cpu\modules\cpu_interrupt.h" />
     <ClInclude Include="src\cpu\modules\cpu_jump.h" />
     <ClInclude Include="src\cpu\modules\cpu_load.h" />
