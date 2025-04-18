@@ -1,5 +1,6 @@
 #include "emulator.h"
 #include "cpu/cpu.h"
+#include "ppu/ppu.h"
 
 #include <cstdint>
 #include <fstream>
@@ -51,7 +52,9 @@ void Emulator::Cycle() {
 		return;
 	}
 	static CPU cpu;
+	static PPU ppu;
 
 	cpu.ExecuteOpcode(memory, pc);
 	cpu.UpdateTimers(memory, cycles);
+	ppu.Update(memory, cycles);
 }

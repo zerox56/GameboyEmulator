@@ -140,6 +140,7 @@
     <ClCompile Include="src\cpu\modules\cpu_misc.cpp" />
     <ClCompile Include="src\cpu\modules\cpu_stack.cpp" />
     <ClCompile Include="src\emulator.cpp" />
+    <ClCompile Include="src\ppu\ppu.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\utils\bit_utils.cpp" />
   </ItemGroup>
@@ -156,6 +157,7 @@
     <ClInclude Include="src\cpu\modules\cpu_stack.h" />
     <ClInclude Include="src\emulator.h" />
     <ClInclude Include="src\cpu\cpu_state.h" />
+    <ClInclude Include="src\ppu\ppu.h" />
     <ClInclude Include="src\utils\bit_utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
