@@ -1,12 +1,15 @@
 #include "ppu.h"
 
-PPU::PPU() {}
+PPU::PPU() {
+	display.resize(screenWidth * screenHeigth);
+}
 
 void PPU::Update(std::vector<uint8_t>& memory, uint8_t cycles) {
 	cycleCounter += cycles;
 
 	UpdateMode(memory);
 	UpdateSTAT(memory);	
+	FetchBackground(memory);
 }
 
 void PPU::UpdateMode(std::vector<uint8_t>& memory) {
@@ -79,4 +82,44 @@ void PPU::UpdateSTAT(std::vector<uint8_t>& memory) {
 	}
 
 	memory[STATAddress] = STAT;
+}
+
+void PPU::FetchBackground(std::vector<uint8_t>& memory) {
+	uint8_t SCX = memory[SCXAddress];
+	uint8_t SCY = memory[SCYAddress];
+	uint8_t LY = memory[LYAddress];
+	uint8_t LCDC = memory[LCDCAddress];
+	uint8_t pixelRow = SCY + LY;
+
+	bool useTileMap1 = (LCDC >> 3) & 1;
+	uint16_t tileMapBaseAddress = useTileMap1 ? tileMap1Start : tileMap0Start;
+	bool isTileUnsigned = (LCDC >> 4) & 1;
+
+	for (uint8_t x = 0; x < 160; x++) {
+		uint8_t column = (SCX + x) / 8;
+		uint8_t row = (SCY + LY) / 8;
+
+		uint8_t tileMapIndex = row * 32 + column;
+		uint8_t tileId = memory[tileMapBaseAddress + tileMapIndex];
+		uint16_t tileBaseAddress = isTileUnsigned ? unsignedTilesStart : signedTilesStart;
+
+		if (isTileUnsigned) {
+			tileId *= 16;
+		}
+		else {
+			tileId = (int8_t)tileId * 16;
+		}
+
+		uint8_t line = (SCY + LY) % 8;
+		uint8_t tileDataAddress = tileBaseAddress + tileId + (line * 2);
+
+		uint8_t lowBitPlane = memory[tileDataAddress];
+		uint8_t highBitPlane = memory[tileDataAddress + 1];
+
+		uint8_t xBit = (7 - (SCX + x) % 8);
+		uint8_t low = (lowBitPlane >> xBit) & 1;
+		uint8_t high = (highBitPlane >> xBit) & 1;
+		uint8_t colorId = (high << 1) | low;
+		display[LY * screenWidth + x] = colorId;
+	}
 }
