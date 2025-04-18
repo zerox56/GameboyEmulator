@@ -188,6 +188,7 @@ void PPU::DrawSprites(std::vector<uint8_t>& memory) {
 	uint8_t LCDC = memory[LCDCAddress];
 	uint8_t LY = memory[LYAddress];
 	bool objDoubleHeight = (LCDC >> 2) & 1;
+	uint8_t objHeight = objDoubleHeight ? 16 : 8;
 	std::vector<Sprite> visibleSprites;
 
 	for (uint8_t i = 0; i < 40; i++) {
@@ -212,9 +213,12 @@ void PPU::DrawSprites(std::vector<uint8_t>& memory) {
 
 	for (uint8_t spriteIndex = 0; spriteIndex < visibleSprites.size(); spriteIndex++) {
 		Sprite sprite = visibleSprites[spriteIndex];
-		uint8_t yInTile = LY - sprite.y;
 		bool useOBP1 = sprite.attributes & 0x10;
+		bool flipX = sprite.attributes & 0x20;
+		bool flipY = sprite.attributes & 0x40;
 
+		uint8_t yInTile = flipY ? (objHeight - 1 - (LY - sprite.y)) : (LY - sprite.y);
+;
 		bool isTileUnsigned = (LCDC >> 4) & 1;
 		uint16_t tileBaseAddress = isTileUnsigned ? unsignedTilesStart : signedTilesStart;
 
@@ -225,7 +229,7 @@ void PPU::DrawSprites(std::vector<uint8_t>& memory) {
 			uint8_t xPixel = sprite.x + x;
 			if (xPixel >= 160) continue;
 
-			uint8_t xBit = 7 - x;
+			uint8_t xBit = flipX ? x : (7 - x);
 			uint8_t colorValue = GetSpriteColorValue(memory, tileDataAddress, xBit, useOBP1);
 
 			if (colorValue == 0) continue;

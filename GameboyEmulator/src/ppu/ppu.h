@@ -72,5 +72,5 @@ private:
 	void FetchBackground(std::vector<uint8_t>& memory);
 	void FetchWindow(std::vector<uint8_t>& memory);
 
-	void DrawSprites(std::vector<uint8_t>& memor);
+	void DrawSprites(std::vector<uint8_t>& memory);
 };
