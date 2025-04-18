@@ -120,6 +120,8 @@ void PPU::FetchBackground(std::vector<uint8_t>& memory) {
 		uint8_t low = (lowBitPlane >> xBit) & 1;
 		uint8_t high = (highBitPlane >> xBit) & 1;
 		uint8_t colorId = (high << 1) | low;
+		 
+		uint8_t colorValue = (memory[BGPAddress] >> (colorId * 2)) & 3;
 		display[LY * screenWidth + x] = colorId;
 	}
 }
