@@ -54,16 +54,29 @@ void PPU::UpdateMode(std::vector<uint8_t>& memory) {
 }
 
 void PPU::UpdateSTAT(std::vector<uint8_t>& memory) {
+	uint8_t STAT = memory[STATAddress];
 	if (currentMode == PPUMode::HBlank || currentMode == PPUMode::OAMSearch) {
-		uint8_t stat = memory[STATAddress];
-		stat = (stat & 0b11111100) | static_cast<uint8_t>(currentMode);  // Keep bits 2–7
-		memory[STATAddress] = stat;
-		return;
+		STAT = (STAT & 0b11111100) | static_cast<uint8_t>(currentMode);  // Keep bits 2–7
 	}
 	if (memory[LYAddress] == memory[LYCAddress]) {
-		memory[STATAddress] |= 0x04; // Set LYC=LY flag
+		STAT |= 0x04; // Set LYC=LY flag
+		if (STAT & 0x40) {// LYC interrupt enable check
+			memory[IFAddress] |= 0x02;
+		}
 	}
 	else {
-		memory[STATAddress] &= ~0x04; // Clear LYC=LY flag
+		STAT &= ~0x04; // Clear LYC=LY flag
 	}
+
+	if (currentMode == PPUMode::HBlank && (STAT & 0x08)) {
+		memory[IFAddress] |= 0x02;
+	}
+	else if (currentMode == PPUMode::VBlank && (STAT & 0x10)) {
+		memory[IFAddress] |= 0x02;
+	}
+	else if (currentMode == PPUMode::OAMSearch && (STAT & 0x20)) {
+		memory[IFAddress] |= 0x02;
+	}
+
+	memory[STATAddress] = STAT;
 }
