@@ -10,6 +10,7 @@ void PPU::Update(std::vector<uint8_t>& memory, uint8_t cycles) {
 	UpdateMode(memory);
 	UpdateSTAT(memory);	
 	FetchBackground(memory);
+	FetchWindow(memory);
 }
 
 void PPU::UpdateMode(std::vector<uint8_t>& memory) {
@@ -84,12 +85,40 @@ void PPU::UpdateSTAT(std::vector<uint8_t>& memory) {
 	memory[STATAddress] = STAT;
 }
 
+uint8_t PPU::GetTileDataAddress(std::vector<uint8_t>& memory, uint8_t column, uint8_t row, uint8_t pixelInTile,
+	uint16_t tileMapBaseAddress, bool isTileUnsigned) {
+	uint8_t tileMapIndex = row * 32 + column;
+	uint8_t	tileId = memory[tileMapBaseAddress + tileMapIndex];
+	uint16_t tileBaseAddress = isTileUnsigned ? unsignedTilesStart : signedTilesStart;
+
+	if (isTileUnsigned) {
+		tileId *= 16;
+	}
+	else {
+		tileId = (int8_t)tileId * 16;
+	}
+
+	uint8_t pixelRowIndex = pixelInTile % 8;
+	return tileBaseAddress + tileId + (pixelRowIndex * 2);
+}
+
+uint8_t PPU::GetColorValue(std::vector<uint8_t>& memory, uint8_t tileDataAddress, uint8_t xBit) {
+	uint8_t lowBitPlane = memory[tileDataAddress];
+	uint8_t highBitPlane = memory[tileDataAddress + 1];
+
+	uint8_t low = (lowBitPlane >> xBit) & 1;
+	uint8_t high = (highBitPlane >> xBit) & 1;
+
+	uint8_t colorId = (high << 1) | low;
+	return (memory[BGPAddress] >> (colorId * 2)) & 3;;
+}
+
 void PPU::FetchBackground(std::vector<uint8_t>& memory) {
 	uint8_t SCX = memory[SCXAddress];
 	uint8_t SCY = memory[SCYAddress];
 	uint8_t LY = memory[LYAddress];
 	uint8_t LCDC = memory[LCDCAddress];
-	uint8_t pixelRow = SCY + LY;
+	uint8_t pixelInTile = SCY + LY;
 
 	bool useTileMap1 = (LCDC >> 3) & 1;
 	uint16_t tileMapBaseAddress = useTileMap1 ? tileMap1Start : tileMap0Start;
@@ -99,29 +128,46 @@ void PPU::FetchBackground(std::vector<uint8_t>& memory) {
 		uint8_t column = (SCX + x) / 8;
 		uint8_t row = (SCY + LY) / 8;
 
-		uint8_t tileMapIndex = row * 32 + column;
-		uint8_t tileId = memory[tileMapBaseAddress + tileMapIndex];
-		uint16_t tileBaseAddress = isTileUnsigned ? unsignedTilesStart : signedTilesStart;
+		uint8_t tileDataAddress = GetTileDataAddress(memory, column, row, pixelInTile, tileMapBaseAddress, isTileUnsigned);
 
-		if (isTileUnsigned) {
-			tileId *= 16;
-		}
-		else {
-			tileId = (int8_t)tileId * 16;
-		}
+		uint8_t xBit = (7 - (SCX + x) % 8);
+		uint8_t colorValue = GetColorValue(memory, tileDataAddress, xBit);
+		display[LY * screenWidth + x] = colorValue;
+	}
+}
 
-		uint8_t line = (SCY + LY) % 8;
-		uint8_t tileDataAddress = tileBaseAddress + tileId + (line * 2);
+void PPU::FetchWindow(std::vector<uint8_t>& memory) {
+	uint8_t LCDC = memory[LCDCAddress];
+	bool renderWindow = (LCDC >> 5) & 1;
+	if (!renderWindow) {
+		return;
+	}
+
+	uint8_t WX = memory[WXAddress];
+	uint8_t WY = memory[WYAddress];
+	uint8_t LY = memory[LYAddress];
+
+	if (LY < WY) {
+		return;
+	}
+
+	bool useTileMap1 = (LCDC >> 6) & 1;
+	uint16_t tileMapBaseAddress = useTileMap1 ? tileMap1Start : tileMap0Start;
+	bool isTileUnsigned = (LCDC >> 4) & 1;
+	uint8_t line = LY - WY;
+
+	for (uint8_t x = WX - 7; x < 160; x++) {
+		uint8_t column = (x - WX - 7) / 8;
+		uint8_t row = line / 8;
+		uint8_t pixelInTile = (x - (WX - 7)) % 8;
+
+		uint8_t tileDataAddress = GetTileDataAddress(memory, column, row, pixelInTile, tileMapBaseAddress, isTileUnsigned);
 
 		uint8_t lowBitPlane = memory[tileDataAddress];
 		uint8_t highBitPlane = memory[tileDataAddress + 1];
 
-		uint8_t xBit = (7 - (SCX + x) % 8);
-		uint8_t low = (lowBitPlane >> xBit) & 1;
-		uint8_t high = (highBitPlane >> xBit) & 1;
-		uint8_t colorId = (high << 1) | low;
-		 
-		uint8_t colorValue = (memory[BGPAddress] >> (colorId * 2)) & 3;
-		display[LY * screenWidth + x] = colorId;
+		uint8_t xBit = 7 - pixelInTile;
+		uint8_t colorValue = GetColorValue(memory, tileDataAddress, xBit);
+		display[LY * screenWidth + x] = colorValue;
 	}
 }

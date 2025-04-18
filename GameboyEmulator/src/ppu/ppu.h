@@ -41,11 +41,20 @@ private:
 	// Background palette
 	uint8_t BGPAddress = 0xFF47;
 
+	// Window related
+	uint8_t WXAddress = 0xFF4B;
+	uint8_t WYAddress = 0xFF4A;
+
 	// Interrupt Flag
 	uint8_t IFAddress = 0xFF0F;
 	uint8_t STATAddress = 0xFF41;
 
 	void UpdateMode(std::vector<uint8_t>& memory);
 	void UpdateSTAT(std::vector<uint8_t>& memory);
+
+	uint8_t GetTileDataAddress(std::vector<uint8_t>& memory, uint8_t column, uint8_t row, uint8_t pixelInTile,
+		uint16_t tileMapBaseAddress, bool isTileUnsigned);
+	uint8_t GetColorValue(std::vector<uint8_t>& memory, uint8_t tileDataAddress, uint8_t xBit);
 	void FetchBackground(std::vector<uint8_t>& memory);
+	void FetchWindow(std::vector<uint8_t>& memory);
 };
