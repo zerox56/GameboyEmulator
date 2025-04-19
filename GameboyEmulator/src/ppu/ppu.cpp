@@ -14,6 +14,10 @@ void PPU::Update(std::vector<uint8_t>& memory, uint8_t cycles) {
 	DrawSprites(memory);
 }
 
+std::vector<uint8_t>& PPU::GetDisplay() {
+	return display;
+}
+
 void PPU::UpdateMode(std::vector<uint8_t>& memory) {
 	switch (currentMode) {
 		case PPU::PPUMode::OAMSearch: {

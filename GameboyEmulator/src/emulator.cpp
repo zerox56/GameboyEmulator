@@ -1,6 +1,7 @@
 #include "emulator.h"
 #include "cpu/cpu.h"
 #include "ppu/ppu.h"
+#include "sdl/sdl_renderer.h"
 
 #include <cstdint>
 #include <fstream>
@@ -53,8 +54,11 @@ void Emulator::Cycle() {
 	}
 	static CPU cpu;
 	static PPU ppu;
+	static SDLRenderer sdlRenderer;
+	sdlRenderer.Initialize();
 
 	cpu.ExecuteOpcode(memory, pc);
 	cpu.UpdateTimers(memory, cycles);
 	ppu.Update(memory, cycles);
+	sdlRenderer.Render(ppu.GetDisplay());
 }

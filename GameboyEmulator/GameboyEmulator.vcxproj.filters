@@ -63,6 +63,9 @@
     <ClCompile Include="src\ppu\ppu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\sdl\sdl_renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\emulator.h">
@@ -105,6 +108,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ppu\ppu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdl\sdl_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

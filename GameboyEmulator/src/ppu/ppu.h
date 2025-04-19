@@ -6,6 +6,7 @@ class PPU {
 public:
 	PPU();
 	void Update(std::vector<uint8_t>& memory, uint8_t cycles);
+	std::vector<uint8_t>& GetDisplay();
 private:
 	enum class PPUMode {
 		HBlank = 0,
