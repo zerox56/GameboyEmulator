@@ -1,7 +1,4 @@
 #include "emulator.h"
-#include "cpu/cpu.h"
-#include "ppu/ppu.h"
-#include "sdl/sdl_renderer.h"
 
 #include <cstdint>
 #include <fstream>
@@ -12,8 +9,13 @@ const std::vector<uint8_t> Emulator::header{
 	0xBB,0xBB,0x67,0x63,0x6E,0x0E,0xEC,0xCC,0xDD,0xDC,0x99,0x9F,0xBB,0xB9,0x33,0x3E
 };
 
+CPU& Emulator::cpu = CPU::GetInstance();
+PPU& Emulator::ppu = PPU::GetInstance();
+SDLRenderer& Emulator::sdlRenderer = SDLRenderer::GetInstance();
+
 Emulator::Emulator() {
 	memory.resize(maxMemory);
+	sdlRenderer.Initialize();
 }
 
 bool Emulator::LoadRom(const char* filePath) {
@@ -52,10 +54,6 @@ void Emulator::Cycle() {
 		printf("PC out of bounds: %02X\n", pc);
 		return;
 	}
-	static CPU cpu;
-	static PPU ppu;
-	static SDLRenderer sdlRenderer;
-	sdlRenderer.Initialize();
 
 	cpu.ExecuteOpcode(memory, pc);
 	cpu.UpdateTimers(memory, cycles);

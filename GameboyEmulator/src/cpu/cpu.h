@@ -7,6 +7,11 @@
 
 class CPU {
 public:
+	static CPU& GetInstance() {
+		static CPU instance;
+		return instance;
+	}
+
 	enum class CounterAction {
 		Advance,
 		AdvanceSkipIME,

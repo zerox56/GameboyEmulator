@@ -1,9 +1,22 @@
 #pragma once
+#include "cpu/cpu.h"
+#include "ppu/ppu.h"
+#include "sdl/sdl_renderer.h"
 
 #include <cstdint>
 #include <vector>
 
 class Emulator {
+public:
+	static Emulator& GetInstance() {
+		static Emulator instance;
+		return instance;
+	}
+
+	Emulator();
+	bool LoadRom(const char* filePath);
+	bool ValidateHeader();
+	void Cycle();
 private:
 	// 8 MB of max memory
 	const uint32_t maxMemory = 8 * 1024 * 1024;
@@ -19,9 +32,8 @@ private:
 	uint16_t pc = startAddress;
 
 	uint8_t cycles = 1;
-public:
-	Emulator();
-	bool LoadRom(const char* filePath);
-	bool ValidateHeader();
-	void Cycle();
+
+	static CPU& cpu;
+	static PPU& ppu;
+	static SDLRenderer& sdlRenderer;
 };

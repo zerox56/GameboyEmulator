@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    Emulator emulator;
+    Emulator emulator = Emulator::GetInstance();
     if (!emulator.LoadRom(argv[1])) {
         printf("Provided ROM file is invalid. Failed during loading.\n");
         return 1;

@@ -6,10 +6,15 @@
 
 class SDLRenderer {
 public:
+    static SDLRenderer& GetInstance() {
+        static SDLRenderer instance;
+        return instance;
+    }
+
     void Initialize();
     void Render(std::vector<uint8_t>& display);
 private:
-    static constexpr uint8_t scale = 10;
+    static constexpr uint8_t scale = 6;
 
     SDL_Color whiteColor = { 155, 188, 15, 255 };
     SDL_Color lightGrayColor = { 139, 172, 15, 255 };
