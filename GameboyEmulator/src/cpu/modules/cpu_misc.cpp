@@ -26,7 +26,7 @@ namespace CPUMisc {
 
         CPUHelper::FlagsType C = setC ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-        CPUHelper::UpdateFlags(cpu, cpu.state.A, value, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::None,
+        CPUHelper::UpdateFlags(cpu, cpu.state.A, 0, value, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::None,
             CPUHelper::FlagsType::False, C);
 
         return CPU::CounterAction::Advance;

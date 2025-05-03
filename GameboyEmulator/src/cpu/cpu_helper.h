@@ -28,6 +28,6 @@ namespace CPUHelper {
 		Invert,
 		None
 	};
-	void UpdateFlag(uint8_t value, uint8_t oldValue, FlagsType flagType, bool& flag);
-	void UpdateFlags(CPU& cpu, uint8_t value, uint8_t oldValue, FlagsType Z, FlagsType N, FlagsType H, FlagsType C);
+	void UpdateFlag(uint8_t result, uint8_t a, uint8_t b, FlagsType flagType, bool& flag);
+	void UpdateFlags(CPU& cpu, uint8_t result, uint8_t a, uint8_t b, FlagsType Z, FlagsType N, FlagsType H, FlagsType C);
 };

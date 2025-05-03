@@ -25,17 +25,21 @@ struct CPUState {
 	uint8_t IEAddress = 0xFFFF; 
 	// Interrupt Flag
 	uint8_t IFAddress = 0xFF0F; 
+	uint8_t FlagZ = 7;
+	uint8_t FlagN = 6;
+	uint8_t FlagH = 5;
+	uint8_t FlagC = 4;
 
 	// Flags functions
 	uint8_t GetFlags() const {
-		return (FZ << 7) | (FN << 6) | (FH << 5) | (FC << 4);
+		return (FZ << FlagZ) | (FN << FlagN) | (FH << FlagH) | (FC << FlagC);
 	}
 
 	void SetFlags(uint8_t F) {
-		FZ = (F >> 7) & 1;
-		FN = (F >> 6) & 1;
-		FH = (F >> 5) & 1;
-		FC = (F >> 4) & 1;
+		FZ = (F >> FlagZ) & 1;
+		FN = (F >> FlagN) & 1;
+		FH = (F >> FlagH) & 1;
+		FC = (F >> FlagC) & 1;
 	}
 
 	// 16bit registers pair functions

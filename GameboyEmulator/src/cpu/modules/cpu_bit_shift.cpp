@@ -49,119 +49,119 @@ namespace CPUBitShift {
 	}
 
 	void RLC_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
 
-		bool shiftedBit = BitUtils::GetMSB(value);
-		value = (value << 1) | shiftedBit;
+		bool shiftedBit = BitUtils::GetMSB(b);
+		uint8_t result = (b << 1) | shiftedBit;
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, value, value, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
-		CPUHelper::SetRegisterValue(cpu, instruction, value);
+		CPUHelper::SetRegisterValue(cpu, instruction, result);
 	}
 
 	void RRC_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
 
-		bool shiftedBit = BitUtils::GetLSB(value);
-		value = (value >> 1) | (shiftedBit << 7);
+		bool shiftedBit = BitUtils::GetLSB(b);
+		uint8_t result = (b >> 1) | (shiftedBit << 7);
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, value, shiftedBit, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, shiftedBit, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
-		CPUHelper::SetRegisterValue(cpu, instruction, value);
+		CPUHelper::SetRegisterValue(cpu, instruction, result);
 	}
 
 	void RL_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
 
-		bool shiftedBit = BitUtils::GetMSB(value);
-		value = (value << 1) | cpu.state.FC;
+		bool shiftedBit = BitUtils::GetMSB(b);
+		uint8_t result = (b << 1) | cpu.state.FC;
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, value, value, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
-		CPUHelper::SetRegisterValue(cpu, instruction, value);
+		CPUHelper::SetRegisterValue(cpu, instruction, result);
 	}
 
 	void RR_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
 
-		bool shiftedBit = BitUtils::GetLSB(value);
-		value = (value >> 1) | (cpu.state.FC << 7);
+		bool shiftedBit = BitUtils::GetLSB(b);
+		uint8_t result = (b >> 1) | (cpu.state.FC << 7);
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, value, value, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
-		CPUHelper::SetRegisterValue(cpu, instruction, value);
+		CPUHelper::SetRegisterValue(cpu, instruction, result);
 	}
 
 	void SLA_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
 
-		bool shiftedBit = BitUtils::GetMSB(value);
-		value = (value << 1) | 0;
+		bool shiftedBit = BitUtils::GetMSB(b);
+		uint8_t result = (b << 1) | 0;
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, value, value, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
-		CPUHelper::SetRegisterValue(cpu, instruction, value);
+		CPUHelper::SetRegisterValue(cpu, instruction, result);
 	}
 
 	void SRA_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
 
-		bool shiftedBit = BitUtils::GetLSB(value);
-		value = (value >> 1) | (value & 0x80);
+		bool shiftedBit = BitUtils::GetLSB(b);
+		uint8_t result = (b >> 1) | (b & 0x80);
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, value, value, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
-		CPUHelper::SetRegisterValue(cpu, instruction, value);
+		CPUHelper::SetRegisterValue(cpu, instruction, result);
 	}
 
 	void SWAP_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
 
-		value = (value << 4) | (value >> 4);
+		uint8_t result = (b << 4) | (b >> 4);
 
-		CPUHelper::UpdateFlags(cpu, value, value, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, CPUHelper::FlagsType::False);
 
-		CPUHelper::SetRegisterValue(cpu, instruction, value);
+		CPUHelper::SetRegisterValue(cpu, instruction, result);
 	}
 
 	void SRL_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
 
-		bool shiftedBit = BitUtils::GetLSB(value);
-		value = value >> 1;
+		bool shiftedBit = BitUtils::GetLSB(b);
+		uint8_t result = b >> 1;
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, value, value, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
-		CPUHelper::SetRegisterValue(cpu, instruction, value);
+		CPUHelper::SetRegisterValue(cpu, instruction, result);
 	}
 
 	void BIT_B_R(CPU& cpu, CPU::Instruction instruction, uint8_t bit) {
-		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction);
-		uint8_t bitValue = (value >> bit) & 1;
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t result = (b >> bit) & 1;
 
-		CPUHelper::UpdateFlags(cpu, bitValue, bitValue, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::True, CPUHelper::FlagsType::None);
 	}
 

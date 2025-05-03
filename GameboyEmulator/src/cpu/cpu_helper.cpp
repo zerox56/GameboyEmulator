@@ -40,7 +40,7 @@ namespace CPUHelper {
     }
 
     // Flag helpers
-    void UpdateFlag(uint8_t value, uint8_t oldValue, FlagsType flagType, bool& flag) {
+    void UpdateFlag(uint8_t result, uint8_t a, uint8_t b, FlagsType flagType, bool& flag) {
         switch (flagType)
         {
             case FlagsType::False:
@@ -50,29 +50,29 @@ namespace CPUHelper {
                 flag = true;
                 break;
             case FlagsType::ValueZero:
-                flag = value == 0;
+                flag = result == 0;
                 break;
             case FlagsType::ValueNotZero:
-                flag = value != 0;
+                flag = result != 0;
                 break;
             case FlagsType::BasedOnValue:
-                flag = value;
+                flag = result;
                 break;
             case FlagsType::OverflowBit3:
                 // Check if overflows to bit 4 or higher (half carry)
-                flag = ((oldValue & 0xF) + (value & 0xF)) > 0xF;
+                flag = ((a & 0xF) + (b & 0xF)) > 0xF;
                 break;
             case FlagsType::OverflowBit7:
                 // Check if overflows to bit 8
-                flag = value > 0xFF;
+                flag = (uint16_t)a + (uint16_t)b > 0xFF;
                 break;
             case FlagsType::BorrowBit4:
                 // Check if borrow from bit 4 or lower (half borrow)
-                flag = ((oldValue & 0xF) - (value & 0xF)) < 0xF;
+                flag = (a & 0xF) < (b & 0xF);
                 break;
             case FlagsType::BorrowBit7:
                 // Check if borrow from oldValue < value
-                flag = oldValue < value;
+                flag = b < a;
                 break;
             case FlagsType::Invert:
                 flag = !flag;
@@ -83,10 +83,19 @@ namespace CPUHelper {
         }
     }
 
-    void UpdateFlags(CPU& cpu, uint8_t value, uint8_t oldValue, FlagsType Z, FlagsType N, FlagsType H, FlagsType C) {
-        UpdateFlag(value, oldValue, Z, cpu.state.FZ);
-        UpdateFlag(value, oldValue, N, cpu.state.FN);
-        UpdateFlag(value, oldValue, H, cpu.state.FH);
-        UpdateFlag(value, oldValue, C, cpu.state.FC);
+    void UpdateFlags(CPU& cpu, uint8_t result, uint8_t a, uint8_t b, FlagsType Z, FlagsType N, FlagsType H, FlagsType C) {
+        printf("IFNO - result: 0x%02X | a: 0x%02X | b: 0x%02X\n",
+            result, a, b);
+
+        printf("Old Flags - Z: 0x%02X | N: 0x%02X | H: 0x%02X | C: 0x%02X \n", 
+            cpu.state.FZ, cpu.state.FN, cpu.state.FH, cpu.state.FC);
+
+        UpdateFlag(result, a, b, Z, cpu.state.FZ);
+        UpdateFlag(result, a, b, N, cpu.state.FN);
+        UpdateFlag(result, a, b, H, cpu.state.FH);
+        UpdateFlag(result, a, b, C, cpu.state.FC);
+
+        printf("New Flags - Z: 0x%02X | N: 0x%02X | H: 0x%02X | C: 0x%02X \n",
+            cpu.state.FZ, cpu.state.FN, cpu.state.FH, cpu.state.FC);
     }
 }
