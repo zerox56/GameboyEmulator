@@ -5,13 +5,9 @@ namespace CPU8BitArithmetic {
     CPU::CounterAction ADD_A_R(CPU& cpu, CPU::Instruction instruction) {
         uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
 
-        printf("REG A: 0x%02X | REG N: %02X\n", cpu.state.A, b);
-
         uint8_t a = cpu.state.A;
         uint8_t result = a + b;
         cpu.state.A = result;
-
-        printf("RESULT: 0x%04X | NEW REG A: %02X\n", result, cpu.state.A);
 
         CPUHelper::UpdateFlags(cpu, result, a, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
             CPUHelper::FlagsType::OverflowBit3, CPUHelper::FlagsType::OverflowBit7);
