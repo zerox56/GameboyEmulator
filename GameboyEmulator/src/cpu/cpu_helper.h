@@ -11,7 +11,8 @@ namespace CPUHelper {
 
 	// Register helpers
 	uint8_t GetRegisterIndex(CPU::Instruction instruction);
-	uint8_t GetRegisterValue(CPU& cpu, CPU::Instruction instruction);
+	uint8_t GetALURegisterIndex(CPU::Instruction instruction);
+	uint8_t GetRegisterValue(CPU& cpu, CPU::Instruction instruction, bool aluInstruction);
 	void SetRegisterValue(CPU& cpu, CPU::Instruction instruction, uint8_t value);
 
 	// Flag helpers

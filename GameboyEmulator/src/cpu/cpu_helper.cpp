@@ -19,8 +19,20 @@ namespace CPUHelper {
         return (instruction.opcode >> 3) & 0b111;
     }
 
-    uint8_t GetRegisterValue(CPU& cpu, CPU::Instruction instruction) {
-        uint8_t regIndex = GetRegisterIndex(instruction);
+    uint8_t GetALURegisterIndex(CPU::Instruction instruction) {
+        // Mask opcode with binary masking
+        return instruction.opcode & 0b111;
+    }
+
+    uint8_t GetRegisterValue(CPU& cpu, CPU::Instruction instruction, bool aluInstruction) {
+        uint8_t regIndex = 0;
+        if (aluInstruction) {
+            regIndex = GetALURegisterIndex(instruction);
+        }
+        else {
+            regIndex = GetRegisterIndex(instruction);
+        }
+
         if (regIndex == cpu.state.HLIndex) {
             return instruction.memory[cpu.state.GetHL()];
         }

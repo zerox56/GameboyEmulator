@@ -3,7 +3,7 @@
 
 namespace CPU8BitArithmetic {
     CPU::CounterAction ADD_A_R(CPU& cpu, CPU::Instruction instruction) {
-        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
         uint8_t a = cpu.state.A;
         uint8_t result = a + b;
@@ -16,7 +16,7 @@ namespace CPU8BitArithmetic {
     }
 
     CPU::CounterAction ADC_A_R(CPU& cpu, CPU::Instruction instruction) {
-        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
         uint8_t a = cpu.state.A;
         uint8_t result = a + b + cpu.state.C;
@@ -29,7 +29,7 @@ namespace CPU8BitArithmetic {
     }
 
     CPU::CounterAction SUB_A_R(CPU& cpu, CPU::Instruction instruction) {
-        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
         uint8_t a = cpu.state.A;
         uint8_t result = a - b;
@@ -42,7 +42,7 @@ namespace CPU8BitArithmetic {
     }
 
     CPU::CounterAction SBC_A_R(CPU& cpu, CPU::Instruction instruction) {
-        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
         uint8_t a = cpu.state.A;
         uint8_t result = a - b - cpu.state.C;
@@ -55,7 +55,7 @@ namespace CPU8BitArithmetic {
     }
 
     CPU::CounterAction AND_A_R(CPU& cpu, CPU::Instruction instruction) {
-        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
         uint8_t a = cpu.state.A;
         uint8_t result = b & a;
@@ -68,7 +68,7 @@ namespace CPU8BitArithmetic {
     }
 
     CPU::CounterAction XOR_A_R(CPU& cpu, CPU::Instruction instruction) {
-        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
         uint8_t a = cpu.state.A;
         uint8_t result = b ^ a;
@@ -81,7 +81,7 @@ namespace CPU8BitArithmetic {
     }
 
     CPU::CounterAction OR_A_R(CPU& cpu, CPU::Instruction instruction) {
-        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
         uint8_t a = cpu.state.A;
         uint8_t result = b | a;
@@ -94,7 +94,7 @@ namespace CPU8BitArithmetic {
     }
 
     CPU::CounterAction CP_A_R(CPU& cpu, CPU::Instruction instruction) {
-        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
         uint8_t a = cpu.state.A; 
         uint8_t result = a - b;
@@ -106,7 +106,7 @@ namespace CPU8BitArithmetic {
     }
 
     CPU::CounterAction INC_R(CPU& cpu, CPU::Instruction instruction) {
-        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, false);
         uint8_t result = b + 1;
 
         CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
@@ -118,7 +118,7 @@ namespace CPU8BitArithmetic {
     }
 
     CPU::CounterAction DEC_R(CPU& cpu, CPU::Instruction instruction) {
-        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+        uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, false);
         uint8_t result = b - 1;
 
         CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,

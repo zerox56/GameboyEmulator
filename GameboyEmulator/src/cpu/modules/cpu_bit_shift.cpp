@@ -49,7 +49,7 @@ namespace CPUBitShift {
 	}
 
 	void RLC_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
 		bool shiftedBit = BitUtils::GetMSB(b);
 		uint8_t result = (b << 1) | shiftedBit;
@@ -63,7 +63,7 @@ namespace CPUBitShift {
 	}
 
 	void RRC_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
 		bool shiftedBit = BitUtils::GetLSB(b);
 		uint8_t result = (b >> 1) | (shiftedBit << 7);
@@ -77,7 +77,7 @@ namespace CPUBitShift {
 	}
 
 	void RL_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
 		bool shiftedBit = BitUtils::GetMSB(b);
 		uint8_t result = (b << 1) | cpu.state.FC;
@@ -91,7 +91,7 @@ namespace CPUBitShift {
 	}
 
 	void RR_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
 		bool shiftedBit = BitUtils::GetLSB(b);
 		uint8_t result = (b >> 1) | (cpu.state.FC << 7);
@@ -105,7 +105,7 @@ namespace CPUBitShift {
 	}
 
 	void SLA_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
 		bool shiftedBit = BitUtils::GetMSB(b);
 		uint8_t result = (b << 1) | 0;
@@ -119,7 +119,7 @@ namespace CPUBitShift {
 	}
 
 	void SRA_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
 		bool shiftedBit = BitUtils::GetLSB(b);
 		uint8_t result = (b >> 1) | (b & 0x80);
@@ -133,7 +133,7 @@ namespace CPUBitShift {
 	}
 
 	void SWAP_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
 		uint8_t result = (b << 4) | (b >> 4);
 
@@ -144,7 +144,7 @@ namespace CPUBitShift {
 	}
 
 	void SRL_R(CPU& cpu, CPU::Instruction instruction) {
-		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
 		bool shiftedBit = BitUtils::GetLSB(b);
 		uint8_t result = b >> 1;
@@ -158,7 +158,7 @@ namespace CPUBitShift {
 	}
 
 	void BIT_B_R(CPU& cpu, CPU::Instruction instruction, uint8_t bit) {
-		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 		uint8_t result = (b >> bit) & 1;
 
 		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
@@ -166,13 +166,13 @@ namespace CPUBitShift {
 	}
 
 	void SET_B_R(CPU& cpu, CPU::Instruction instruction, uint8_t bit) {
-		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction, true);
 		value |= (1 << bit);
 		CPUHelper::SetRegisterValue(cpu, instruction, value);
 	}
 
 	void RES_B_R(CPU& cpu, CPU::Instruction instruction, uint8_t bit) {
-		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction);
+		uint8_t value = CPUHelper::GetRegisterValue(cpu, instruction, true);
 		value &= ~(1 << bit);
 		CPUHelper::SetRegisterValue(cpu, instruction, value);
 	}
