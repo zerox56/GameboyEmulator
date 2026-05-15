@@ -16,7 +16,7 @@ namespace CPUHelper {
     // Register helpers
     uint8_t GetRegisterIndex(CPU::Instruction instruction) {
         // Mask opcode with binary masking
-        return instruction.opcode & 0b111;
+        return (instruction.opcode >> 3) & 0b111;
     }
 
     uint8_t GetRegisterValue(CPU& cpu, CPU::Instruction instruction) {
@@ -84,7 +84,7 @@ namespace CPUHelper {
     }
 
     void UpdateFlags(CPU& cpu, uint8_t result, uint8_t a, uint8_t b, FlagsType Z, FlagsType N, FlagsType H, FlagsType C) {
-        printf("IFNO - result: 0x%02X | a: 0x%02X | b: 0x%02X\n",
+        printf("INFO - result: 0x%02X | a: 0x%02X | b: 0x%02X\n",
             result, a, b);
 
         printf("Old Flags - Z: 0x%02X | N: 0x%02X | H: 0x%02X | C: 0x%02X \n", 
