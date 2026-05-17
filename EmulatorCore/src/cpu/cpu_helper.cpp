@@ -92,7 +92,7 @@ namespace CPUHelper {
                 break;
             case FlagsType::BorrowBit7:
                 // Check if borrow from oldValue < value
-                flag = b < a;
+                flag = a < b;
                 break;
             case FlagsType::Invert:
                 flag = !flag;

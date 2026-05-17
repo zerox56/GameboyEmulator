@@ -359,3 +359,161 @@ TEST_CASE("All ADC_A_R functions") {
         }
     }
 }
+
+TEST_CASE("All SUB_A_R functions") {
+    struct TestCase {
+        string name;
+        uint8_t A;
+        uint8_t reg;
+        uint8_t expectedResult;
+        bool flagZ;
+        bool flagN;
+        bool flagH;
+        bool flagC;
+    };
+
+    std::vector<TestCase> cases = {
+        {"Sub case 1", 0x0A, 0x01, 0x09, false, true, false, false},
+        //{"Sub case 2", 0x10, 0x0F, 0x01, false, true, true, false},
+        //{"Both 0", 0x00, 0x00, 0x00, true, true, false, false},
+        //{"Carry", 0x02, 0xFF, 0x03, false, true, true, true},
+        //{"Half-Carry", 0x10, 0x01, 0x0F, false, true, true, false},
+        //{"Borrow to zero", 0x05, 0x05, 0x00, true, true, false, false},
+        //{"Borrow to non-zero", 0x05, 0x04, 0x01, false, true, false, false},
+    };
+
+    SUBCASE("SUB_A_B") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.A = tc.A;
+            cpu.state.B = tc.reg;
+
+            auto instruction = CreateInstruction(0x90);
+            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+
+            CHECK(cpu.state.A == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("SUB_A_C") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.A = tc.A;
+            cpu.state.C = tc.reg;
+
+            auto instruction = CreateInstruction(0x91);
+            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+
+            CHECK(cpu.state.A == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("SUB_A_D") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.A = tc.A;
+            cpu.state.D = tc.reg;
+
+            auto instruction = CreateInstruction(0x92);
+            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+
+            CHECK(cpu.state.A == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("SUB_A_E") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.A = tc.A;
+            cpu.state.E = tc.reg;
+
+            auto instruction = CreateInstruction(0x93);
+            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+
+            CHECK(cpu.state.A == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("SUB_A_H") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.A = tc.A;
+            cpu.state.H = tc.reg;
+
+            auto instruction = CreateInstruction(0x94);
+            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+
+            CHECK(cpu.state.A == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("SUB_A_L") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.A = tc.A;
+            cpu.state.L = tc.reg;
+
+            auto instruction = CreateInstruction(0x95);
+            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+
+            CHECK(cpu.state.A == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("SUB_A_HL") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.A = tc.A;
+            cpu.state.SetHL(0x1000);
+
+            std::vector<uint8_t> dummyMemory(0x10000, 0);
+            dummyMemory[0x1000] = tc.reg;
+
+            auto instruction = CreateInstruction(0x96, dummyMemory);
+            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+
+            CHECK(cpu.state.A == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("SUB_A_A") {
+        std::vector<TestCase> localCases = {
+            {"Sub case 1", 0x01, 0x01, 0x00, true, true, false, false},
+            {"Sub case 2", 0x10, 0x10, 0x00, true, true, false, false},
+        };
+
+        for (const auto& tc : localCases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.A = tc.A;
+
+            auto instruction = CreateInstruction(0x97);
+            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+
+            CHECK(cpu.state.A == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+}
