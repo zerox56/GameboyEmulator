@@ -220,7 +220,9 @@ void CPU::ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc) {
     Instruction instruction(memory, pc);
     instruction.opcode = memory[pc];
 
-    printf("PC: 0x%04X | Opcode: %02X\n", pc, instruction.opcode);
+    if (instruction.opcode != 0x00) {
+        printf("PC: 0x%04X | Opcode: %02X\n", pc, instruction.opcode);
+    }
 
     uint8_t instructionBytes = GetBytesByOpcode(instruction.opcode);
     if (instructionBytes >= 2) {
@@ -260,8 +262,10 @@ void CPU::ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc) {
     }
 
     if (debugCycleCurrent++ >= debugCycleMax) {
-        printf("A: %02X B: %02X C: %02X D: %02X E: %02X H: %02X L: %02X\n", 
-            state.A, state.B, state.C, state.D, state.E, state.H, state.L);
+        if (instruction.opcode != 0x00) {
+            printf("A: %02X B: %02X C: %02X D: %02X E: %02X H: %02X L: %02X\n",
+                state.A, state.B, state.C, state.D, state.E, state.H, state.L);
+        }
         debugCycleCurrent = 0;
     }
 }

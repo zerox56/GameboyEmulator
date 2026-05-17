@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)EmulatorCore\src;H:\Libraries\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -90,6 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)EmulatorCore\src;H:\Libraries\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,7 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>H:\Libraries\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)EmulatorCore\src;H:\Libraries\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,7 +123,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>H:\Libraries\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)EmulatorCore\src;H:\Libraries\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,40 +135,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\cpu\cpu.cpp" />
-    <ClCompile Include="src\cpu\cpu_helper.cpp" />
-    <ClCompile Include="src\cpu\cpu_helper.h" />
-    <ClCompile Include="src\cpu\modules\cpu_16bit_arithmetic.cpp" />
-    <ClCompile Include="src\cpu\modules\cpu_8bit_arithmetic.cpp" />
-    <ClCompile Include="src\cpu\modules\cpu_bit_shift.cpp" />
-    <ClCompile Include="src\cpu\modules\cpu_carry_flag.cpp" />
-    <ClCompile Include="src\cpu\modules\cpu_interrupt.cpp" />
-    <ClCompile Include="src\cpu\modules\cpu_jump.cpp" />
-    <ClCompile Include="src\cpu\modules\cpu_load.cpp" />
-    <ClCompile Include="src\cpu\modules\cpu_misc.cpp" />
-    <ClCompile Include="src\cpu\modules\cpu_stack.cpp" />
-    <ClCompile Include="src\emulator.cpp" />
-    <ClCompile Include="src\ppu\ppu.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\sdl\sdl_renderer.cpp" />
-    <ClCompile Include="src\utils\bit_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\cpu\cpu.h" />
-    <ClInclude Include="src\cpu\modules\cpu_16bit_arithmetic.h" />
-    <ClInclude Include="src\cpu\modules\cpu_8bit_arithmetic.h" />
-    <ClInclude Include="src\cpu\modules\cpu_bit_shift.h" />
-    <ClInclude Include="src\cpu\modules\cpu_carry_flag.h" />
-    <ClInclude Include="src\cpu\modules\cpu_interrupt.h" />
-    <ClInclude Include="src\cpu\modules\cpu_jump.h" />
-    <ClInclude Include="src\cpu\modules\cpu_load.h" />
-    <ClInclude Include="src\cpu\modules\cpu_misc.h" />
-    <ClInclude Include="src\cpu\modules\cpu_stack.h" />
-    <ClInclude Include="src\emulator.h" />
-    <ClInclude Include="src\cpu\cpu_state.h" />
-    <ClInclude Include="src\ppu\ppu.h" />
-    <ClInclude Include="src\sdl\sdl_renderer.h" />
-    <ClInclude Include="src\utils\bit_utils.h" />
+    <ProjectReference Include="..\EmulatorCore\EmulatorCore.vcxproj">
+      <Project>{5f60322f-0052-48ba-b0a4-7a7c0398ccc1}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

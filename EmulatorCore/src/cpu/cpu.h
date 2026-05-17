@@ -37,8 +37,8 @@ public:
 	void UpdateTimers(std::vector<uint8_t>& memory, uint8_t cycles);
 private:
 	// Debug
-	uint8_t debugCycleMax = 5;
-	uint8_t debugCycleCurrent = 5;
+	uint8_t debugCycleMax = 0;
+	uint8_t debugCycleCurrent = 0;
 
 	using OpcodeFunc = CPU::CounterAction (*)(CPU&, Instruction);
 	std::vector<CPU::OpcodeFunc> InitializeOpcodeTable();
