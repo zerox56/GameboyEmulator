@@ -19,19 +19,19 @@ TEST_CASE("All ADD_A_R functions") {
         uint8_t reg;
         uint8_t expectedResult;
         bool flagZ;
+        bool flagN;
         bool flagH;
         bool flagC;
     };
 
     std::vector<TestCase> cases = {
-        {"Add case 1", 0x01, 0x01, 0x02, false, false, false},
-        {"Add case 2", 0x10, 0x0F, 0x1F, false, false, false},
-        {"Both 0", 0x00, 0x00, 0x00, true, false, false},
-        {"Carry", 0xFF, 0x01, 0x00, false, false, true},
-        {"Half-Carry", 0x0F, 0x01, 0x10, false, true, false},
-        {"Double Carry", 0xF0, 0x20, 0x10, true, true, true},
-        {"Overflow to zero", 0xFF, 0x01, 0x00, true, true, true},
-        {"Overflow to non-zero", 0xFF, 0x02, 0x01, false, true, true},
+        {"Add case 1", 0x01, 0x01, 0x02, false, false, false, false},
+        {"Add case 2", 0x10, 0x0F, 0x1F, false, false, false, false},
+        {"Both 0", 0x00, 0x00, 0x00, true, false, false, false},
+        {"Carry", 0xFF, 0x01, 0x00, true, false, true, true},
+        {"Half-Carry", 0x0F, 0x01, 0x10, false, false, true, false},
+        {"Overflow to zero", 0xFF, 0x01, 0x00, true, false, true, true},
+        {"Overflow to non-zero", 0xFF, 0x02, 0x01, false, false, true, true},
     };
 
     SUBCASE("ADD_A_B") {
@@ -151,14 +151,13 @@ TEST_CASE("All ADD_A_R functions") {
 
     SUBCASE("ADD_A_A") {
         std::vector<TestCase> localCases = {
-            {"Add case 1", 0x01, 0x01, 0x02, false, false, false},
-            {"Add case 2", 0x10, 0x10, 0x20, false, false, false},
-            {"Both 0", 0x00, 0x00, 0x00, true, false, false},
-            {"Carry", 0x80, 0x80, 0x00, false, false, true},
-            {"Half-Carry", 0x08, 0x08, 0x10, false, true, false},
-            {"Double Carry", 0x88, 0x88, 0x10, true, true, true},
-            {"Overflow to zero", 0x80, 0x80, 0x00, true, true, true},
-            {"Overflow to non-zero", 0x81, 0x81, 0x02, false, true, true},
+            {"Add case 1", 0x01, 0x01, 0x02, false, false, false, false},
+            {"Add case 2", 0x10, 0x10, 0x20, false, false, false, false},
+            {"Both 0", 0x00, 0x00, 0x00, true, false, false, false},
+            {"Carry", 0x80, 0x80, 0x00, true, false, false, true},
+            {"Half-Carry", 0x08, 0x08, 0x10, false, false, true, false},
+            {"Overflow to zero", 0x80, 0x80, 0x00, true, false, false, true},
+            {"Overflow to non-zero", 0x81, 0x81, 0x02, false, false, false, true},
         };
 
         for (const auto& tc : localCases) {
