@@ -27,7 +27,9 @@ namespace CPUHelper {
 		OverflowBit7,
 		OverflowBit7WithFlag,
 		BorrowBit4,
+		BorrowBit4WithFlag,
 		BorrowBit7,
+		BorrowBit7WithFlag,
 		Invert,
 		None
 	};

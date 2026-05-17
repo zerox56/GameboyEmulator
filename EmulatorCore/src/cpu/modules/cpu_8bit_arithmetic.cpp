@@ -45,11 +45,11 @@ namespace CPU8BitArithmetic {
         uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
         uint8_t a = cpu.state.A;
-        uint8_t result = a - b - cpu.state.C;
+        uint8_t result = a - b - cpu.state.FlagC;
         cpu.state.A = result;
 
-        CPUHelper::UpdateFlags(cpu, result, a, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,
-            CPUHelper::FlagsType::BorrowBit4, CPUHelper::FlagsType::BorrowBit7);
+        CPUHelper::UpdateFlags(cpu, result, a, b, cpu.state.FlagC, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,
+            CPUHelper::FlagsType::BorrowBit4WithFlag, CPUHelper::FlagsType::BorrowBit7WithFlag);
 
         return CPU::CounterAction::Advance;
     }

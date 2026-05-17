@@ -90,9 +90,17 @@ namespace CPUHelper {
                 // Check if borrow from bit 4 or lower (half borrow)
                 flag = (a & 0xF) < (b & 0xF);
                 break;
+            case FlagsType::BorrowBit4WithFlag:
+                // Check if borrow from bit 4 or lower (half borrow) with flag
+                flag = (a & 0xF) < ((b & 0xF) + carryIn);
+                break;
             case FlagsType::BorrowBit7:
                 // Check if borrow from oldValue < value
                 flag = a < b;
+                break;
+            case FlagsType::BorrowBit7WithFlag:
+                // Check if borrow from oldValue < value + flag
+                flag = a < (b + carryIn);
                 break;
             case FlagsType::Invert:
                 flag = !flag;
