@@ -46,7 +46,7 @@ TEST_CASE("All ADD_A_R functions") {
             CPU8BitArithmetic::ADD_A_R(cpu, instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
-            CheckFlags(cpu, tc.flagZ, false, tc.flagH, tc.flagC);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
         }
     }
 
@@ -62,7 +62,7 @@ TEST_CASE("All ADD_A_R functions") {
             CPU8BitArithmetic::ADD_A_R(cpu, instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
-            CheckFlags(cpu, tc.flagZ, false, tc.flagH, tc.flagC);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
         }
     }
 
@@ -78,7 +78,7 @@ TEST_CASE("All ADD_A_R functions") {
             CPU8BitArithmetic::ADD_A_R(cpu, instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
-            CheckFlags(cpu, tc.flagZ, false, tc.flagH, tc.flagC);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
         }
     }
 
@@ -94,7 +94,7 @@ TEST_CASE("All ADD_A_R functions") {
             CPU8BitArithmetic::ADD_A_R(cpu, instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
-            CheckFlags(cpu, tc.flagZ, false, tc.flagH, tc.flagC);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
         }
     }
 
@@ -110,7 +110,7 @@ TEST_CASE("All ADD_A_R functions") {
             CPU8BitArithmetic::ADD_A_R(cpu, instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
-            CheckFlags(cpu, tc.flagZ, false, tc.flagH, tc.flagC);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
         }
     }
 
@@ -126,7 +126,7 @@ TEST_CASE("All ADD_A_R functions") {
             CPU8BitArithmetic::ADD_A_R(cpu, instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
-            CheckFlags(cpu, tc.flagZ, false, tc.flagH, tc.flagC);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
         }
     }
 
@@ -145,7 +145,7 @@ TEST_CASE("All ADD_A_R functions") {
             CPU8BitArithmetic::ADD_A_R(cpu, instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
-            CheckFlags(cpu, tc.flagZ, false, tc.flagH, tc.flagC);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
         }
     }
 
@@ -168,6 +168,12 @@ TEST_CASE("All ADD_A_R functions") {
 
             auto instruction = CreateInstruction(0x87);
             CPU8BitArithmetic::ADD_A_R(cpu, instruction);
+
+            CHECK(cpu.state.A == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+}
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, false, tc.flagH, tc.flagC);
