@@ -374,12 +374,12 @@ TEST_CASE("All SUB_A_R functions") {
 
     std::vector<TestCase> cases = {
         {"Sub case 1", 0x0A, 0x01, 0x09, false, true, false, false},
-        //{"Sub case 2", 0x10, 0x0F, 0x01, false, true, true, false},
-        //{"Both 0", 0x00, 0x00, 0x00, true, true, false, false},
-        //{"Carry", 0x02, 0xFF, 0x03, false, true, true, true},
-        //{"Half-Carry", 0x10, 0x01, 0x0F, false, true, true, false},
-        //{"Borrow to zero", 0x05, 0x05, 0x00, true, true, false, false},
-        //{"Borrow to non-zero", 0x05, 0x04, 0x01, false, true, false, false},
+        {"Sub case 2", 0x10, 0x0F, 0x01, false, true, true, false},
+        {"Both 0", 0x00, 0x00, 0x00, true, true, false, false},
+        {"Carry", 0x02, 0xFF, 0x03, false, true, true, true},
+        {"Half-Carry", 0x10, 0x01, 0x0F, false, true, true, false},
+        {"Borrow to zero", 0x05, 0x05, 0x00, true, true, false, false},
+        {"Borrow to non-zero", 0x05, 0x04, 0x01, false, true, false, false},
     };
 
     SUBCASE("SUB_A_B") {
