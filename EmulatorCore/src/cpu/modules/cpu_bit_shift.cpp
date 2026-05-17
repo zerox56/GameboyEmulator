@@ -56,7 +56,7 @@ namespace CPUBitShift {
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
 		CPUHelper::SetRegisterValue(cpu, instruction, result);
@@ -70,7 +70,7 @@ namespace CPUBitShift {
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, result, shiftedBit, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, shiftedBit, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
 		CPUHelper::SetRegisterValue(cpu, instruction, result);
@@ -84,7 +84,7 @@ namespace CPUBitShift {
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
 		CPUHelper::SetRegisterValue(cpu, instruction, result);
@@ -98,7 +98,7 @@ namespace CPUBitShift {
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
 		CPUHelper::SetRegisterValue(cpu, instruction, result);
@@ -112,7 +112,7 @@ namespace CPUBitShift {
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
 		CPUHelper::SetRegisterValue(cpu, instruction, result);
@@ -126,7 +126,7 @@ namespace CPUBitShift {
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
 		CPUHelper::SetRegisterValue(cpu, instruction, result);
@@ -137,7 +137,7 @@ namespace CPUBitShift {
 
 		uint8_t result = (b << 4) | (b >> 4);
 
-		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, CPUHelper::FlagsType::False);
 
 		CPUHelper::SetRegisterValue(cpu, instruction, result);
@@ -151,7 +151,7 @@ namespace CPUBitShift {
 
 		CPUHelper::FlagsType C = shiftedBit ? CPUHelper::FlagsType::True : CPUHelper::FlagsType::False;
 
-		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, C);
 
 		CPUHelper::SetRegisterValue(cpu, instruction, result);
@@ -161,7 +161,7 @@ namespace CPUBitShift {
 		uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 		uint8_t result = (b >> bit) & 1;
 
-		CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, result, 0, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::True, CPUHelper::FlagsType::None);
 	}
 

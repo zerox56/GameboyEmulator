@@ -3,13 +3,13 @@
 
 namespace CPUCarryFlag {
 	CPU::CounterAction CCF(CPU& cpu, CPU::Instruction) {
-		CPUHelper::UpdateFlags(cpu, 0, 0, 0, CPUHelper::FlagsType::None, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, 0, 0, 0, false, CPUHelper::FlagsType::None, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, CPUHelper::FlagsType::Invert);
 		return CPU::CounterAction::Advance;
 	}
 
 	CPU::CounterAction SCF(CPU& cpu, CPU::Instruction) {
-		CPUHelper::UpdateFlags(cpu, 0, 0, 0, CPUHelper::FlagsType::None, CPUHelper::FlagsType::False,
+		CPUHelper::UpdateFlags(cpu, 0, 0, 0, false, CPUHelper::FlagsType::None, CPUHelper::FlagsType::False,
 			CPUHelper::FlagsType::False, CPUHelper::FlagsType::True);
 		return CPU::CounterAction::Advance;
 	}

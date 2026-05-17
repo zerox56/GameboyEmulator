@@ -9,7 +9,7 @@ namespace CPU8BitArithmetic {
         uint8_t result = a + b;
         cpu.state.A = result;
 
-        CPUHelper::UpdateFlags(cpu, result, a, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+        CPUHelper::UpdateFlags(cpu, result, a, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
             CPUHelper::FlagsType::OverflowBit3, CPUHelper::FlagsType::OverflowBit7);
 
         return CPU::CounterAction::Advance;
@@ -19,11 +19,11 @@ namespace CPU8BitArithmetic {
         uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, true);
 
         uint8_t a = cpu.state.A;
-        uint8_t result = a + b + cpu.state.C;
+        uint8_t result = a + b + cpu.state.FlagC;
         cpu.state.A = result;
 
-        CPUHelper::UpdateFlags(cpu, result, a, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
-            CPUHelper::FlagsType::OverflowBit3, CPUHelper::FlagsType::OverflowBit7);
+        CPUHelper::UpdateFlags(cpu, result, a, b, cpu.state.FlagC, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+            CPUHelper::FlagsType::OverflowBit3WithFlag, CPUHelper::FlagsType::OverflowBit7WithFlag);
 
         return CPU::CounterAction::Advance;
     }
@@ -35,7 +35,7 @@ namespace CPU8BitArithmetic {
         uint8_t result = a - b;
         cpu.state.A = result;
 
-        CPUHelper::UpdateFlags(cpu, result, a, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,
+        CPUHelper::UpdateFlags(cpu, result, a, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,
             CPUHelper::FlagsType::BorrowBit4, CPUHelper::FlagsType::BorrowBit7);
 
         return CPU::CounterAction::Advance;
@@ -48,7 +48,7 @@ namespace CPU8BitArithmetic {
         uint8_t result = a - b - cpu.state.C;
         cpu.state.A = result;
 
-        CPUHelper::UpdateFlags(cpu, result, a, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,
+        CPUHelper::UpdateFlags(cpu, result, a, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,
             CPUHelper::FlagsType::BorrowBit4, CPUHelper::FlagsType::BorrowBit7);
 
         return CPU::CounterAction::Advance;
@@ -61,7 +61,7 @@ namespace CPU8BitArithmetic {
         uint8_t result = b & a;
         cpu.state.A = result;
 
-        CPUHelper::UpdateFlags(cpu, result, a, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+        CPUHelper::UpdateFlags(cpu, result, a, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
             CPUHelper::FlagsType::True, CPUHelper::FlagsType::False);
 
         return CPU::CounterAction::Advance;
@@ -74,7 +74,7 @@ namespace CPU8BitArithmetic {
         uint8_t result = b ^ a;
         cpu.state.A = result;
 
-        CPUHelper::UpdateFlags(cpu, result, a, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+        CPUHelper::UpdateFlags(cpu, result, a, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
             CPUHelper::FlagsType::False, CPUHelper::FlagsType::False);
 
         return CPU::CounterAction::Advance;
@@ -87,7 +87,7 @@ namespace CPU8BitArithmetic {
         uint8_t result = b | a;
         cpu.state.A = result;
 
-        CPUHelper::UpdateFlags(cpu, result, a, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+        CPUHelper::UpdateFlags(cpu, result, a, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
             CPUHelper::FlagsType::False, CPUHelper::FlagsType::False);
 
         return CPU::CounterAction::Advance;
@@ -99,7 +99,7 @@ namespace CPU8BitArithmetic {
         uint8_t a = cpu.state.A; 
         uint8_t result = a - b;
 
-        CPUHelper::UpdateFlags(cpu, result, a, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,
+        CPUHelper::UpdateFlags(cpu, result, a, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,
             CPUHelper::FlagsType::BorrowBit4, CPUHelper::FlagsType::BorrowBit7);
 
         return CPU::CounterAction::Advance;
@@ -109,7 +109,7 @@ namespace CPU8BitArithmetic {
         uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, false);
         uint8_t result = b + 1;
 
-        CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+        CPUHelper::UpdateFlags(cpu, result, 0, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
             CPUHelper::FlagsType::OverflowBit3, CPUHelper::FlagsType::None);
 
         CPUHelper::SetRegisterValue(cpu, instruction, result);
@@ -121,7 +121,7 @@ namespace CPU8BitArithmetic {
         uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, false);
         uint8_t result = b - 1;
 
-        CPUHelper::UpdateFlags(cpu, result, 0, b, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,
+        CPUHelper::UpdateFlags(cpu, result, 0, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,
             CPUHelper::FlagsType::BorrowBit4, CPUHelper::FlagsType::None);
 
         CPUHelper::SetRegisterValue(cpu, instruction, result);
@@ -132,7 +132,7 @@ namespace CPU8BitArithmetic {
     CPU::CounterAction CPL(CPU& cpu, CPU::Instruction) {
         cpu.state.A = ~cpu.state.A;
 
-        CPUHelper::UpdateFlags(cpu, 0, 0, 0, CPUHelper::FlagsType::None, CPUHelper::FlagsType::True,
+        CPUHelper::UpdateFlags(cpu, 0, 0, 0, false, CPUHelper::FlagsType::None, CPUHelper::FlagsType::True,
             CPUHelper::FlagsType::True, CPUHelper::FlagsType::None);
 
         return CPU::CounterAction::Advance;

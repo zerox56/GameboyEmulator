@@ -52,7 +52,7 @@ namespace CPUHelper {
     }
 
     // Flag helpers
-    void UpdateFlag(uint8_t result, uint8_t a, uint8_t b, FlagsType flagType, bool& flag) {
+    void UpdateFlag(uint8_t result, uint8_t a, uint8_t b, bool carryIn, FlagsType flagType, bool& flag) {
         switch (flagType)
         {
             case FlagsType::False:
@@ -74,9 +74,17 @@ namespace CPUHelper {
                 // Check if overflows to bit 4 or higher (half carry)
                 flag = ((a & 0xF) + (b & 0xF)) > 0xF;
                 break;
+            case FlagsType::OverflowBit3WithFlag:
+                // Check if overflows to bit 4 or higher (half carry) with flag
+                flag = ((a & 0xF) + (b & 0xF) + carryIn) > 0xF;
+                break;
             case FlagsType::OverflowBit7:
                 // Check if overflows to bit 8
                 flag = (uint16_t)a + (uint16_t)b > 0xFF;
+                break;
+            case FlagsType::OverflowBit7WithFlag:
+                // Check if overflows to bit 8 with flag
+                flag = (uint16_t)a + (uint16_t)b + (uint16_t)carryIn > 0xFF;
                 break;
             case FlagsType::BorrowBit4:
                 // Check if borrow from bit 4 or lower (half borrow)
@@ -95,17 +103,17 @@ namespace CPUHelper {
         }
     }
 
-    void UpdateFlags(CPU& cpu, uint8_t result, uint8_t a, uint8_t b, FlagsType Z, FlagsType N, FlagsType H, FlagsType C) {
+    void UpdateFlags(CPU& cpu, uint8_t result, uint8_t a, uint8_t b, bool carryIn, FlagsType Z, FlagsType N, FlagsType H, FlagsType C) {
         printf("INFO - result: 0x%02X | a: 0x%02X | b: 0x%02X\n",
             result, a, b);
 
         printf("Old Flags - Z: 0x%02X | N: 0x%02X | H: 0x%02X | C: 0x%02X \n", 
             cpu.state.FZ, cpu.state.FN, cpu.state.FH, cpu.state.FC);
 
-        UpdateFlag(result, a, b, Z, cpu.state.FZ);
-        UpdateFlag(result, a, b, N, cpu.state.FN);
-        UpdateFlag(result, a, b, H, cpu.state.FH);
-        UpdateFlag(result, a, b, C, cpu.state.FC);
+        UpdateFlag(result, a, b, carryIn, Z, cpu.state.FZ);
+        UpdateFlag(result, a, b, carryIn, N, cpu.state.FN);
+        UpdateFlag(result, a, b, carryIn, H, cpu.state.FH);
+        UpdateFlag(result, a, b, carryIn, C, cpu.state.FC);
 
         printf("New Flags - Z: 0x%02X | N: 0x%02X | H: 0x%02X | C: 0x%02X \n",
             cpu.state.FZ, cpu.state.FN, cpu.state.FH, cpu.state.FC);
