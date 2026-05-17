@@ -36,7 +36,7 @@ TEST_CASE("All ADD_A_R functions") {
 
     SUBCASE("ADD_A_B") {
         for (const auto& tc : cases) {
-            INFO("Test case: " << tc.name);
+            SUBCASE(tc.name.c_str());
 
             CPU cpu;
             cpu.state.A = tc.A;
@@ -52,7 +52,7 @@ TEST_CASE("All ADD_A_R functions") {
 
     SUBCASE("ADD_A_C") {
         for (const auto& tc : cases) {
-            INFO("Test case: " << tc.name);
+            SUBCASE(tc.name.c_str());
 
             CPU cpu;
             cpu.state.A = tc.A;
@@ -68,7 +68,7 @@ TEST_CASE("All ADD_A_R functions") {
 
     SUBCASE("ADD_A_D") {
         for (const auto& tc : cases) {
-            INFO("Test case: " << tc.name);
+            SUBCASE(tc.name.c_str());
 
             CPU cpu;
             cpu.state.A = tc.A;
@@ -84,7 +84,7 @@ TEST_CASE("All ADD_A_R functions") {
 
     SUBCASE("ADD_A_E") {
         for (const auto& tc : cases) {
-            INFO("Test case: " << tc.name);
+            SUBCASE(tc.name.c_str());
 
             CPU cpu;
             cpu.state.A = tc.A;
@@ -100,7 +100,7 @@ TEST_CASE("All ADD_A_R functions") {
 
     SUBCASE("ADD_A_H") {
         for (const auto& tc : cases) {
-            INFO("Test case: " << tc.name);
+            SUBCASE(tc.name.c_str());
 
             CPU cpu;
             cpu.state.A = tc.A;
@@ -116,7 +116,7 @@ TEST_CASE("All ADD_A_R functions") {
 
     SUBCASE("ADD_A_L") {
         for (const auto& tc : cases) {
-            INFO("Test case: " << tc.name);
+            SUBCASE(tc.name.c_str());
 
             CPU cpu;
             cpu.state.A = tc.A;
@@ -132,7 +132,7 @@ TEST_CASE("All ADD_A_R functions") {
 
     SUBCASE("ADD_A_HL") {
         for (const auto& tc : cases) {
-            INFO("Test case: " << tc.name);
+            SUBCASE(tc.name.c_str());
 
             CPU cpu;
             cpu.state.A = tc.A;
@@ -162,7 +162,7 @@ TEST_CASE("All ADD_A_R functions") {
         };
 
         for (const auto& tc : localCases) {
-            INFO("Test case: " << tc.name);
+            SUBCASE(tc.name.c_str());
 
             CPU cpu;
             cpu.state.A = tc.A;
