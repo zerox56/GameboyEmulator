@@ -1618,3 +1618,35 @@ TEST_CASE("All DEC_R functions") {
         }
     }
 }
+
+TEST_CASE("CPL") {
+    struct TestCase {
+        string name;
+        uint8_t A;
+        uint8_t expectedResult;
+        bool flagZ;
+        bool flagN;
+        bool flagH;
+        bool flagC;
+    };
+
+    std::vector<TestCase> cases = {
+        {"Cpl case 1", 0x01, 0xFE, false, true, true, false},
+        {"Cpl case 2", 0x11, 0xEE, false, true, true, false},
+        {"Cpl case 3", 0x80, 0x7F, false, true, true, false},
+        {"Cpl case 4", 0xFF, 0x00, false, true, true, false},
+    };
+
+    for (const auto& tc : cases) {
+        SUBCASE(tc.name.c_str());
+
+        CPU cpu;
+        cpu.state.A = tc.A;
+
+        auto instruction = CreateInstruction(0x2F);
+        CPU8BitArithmetic::CPL(cpu, instruction);
+
+        CHECK(cpu.state.A == tc.expectedResult);
+        CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+    }
+}
