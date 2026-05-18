@@ -1,16 +1,8 @@
-
 #include "doctest/doctest.h"
 #include "../tests/TestUtils.h"
 
 #include <cpu/cpu.h>
 #include <cpu/modules/cpu_8bit_arithmetic.h>
-
-void CheckFlags(const CPU& cpu, bool Z, bool N, bool H, bool C) {
-    CHECK(cpu.state.FZ == Z);
-    CHECK(cpu.state.FN == N);
-    CHECK(cpu.state.FH == H);
-    CHECK(cpu.state.FC == C);
-}
 
 TEST_CASE("All ADD_A_R functions") {
     struct TestCase {
@@ -212,7 +204,7 @@ TEST_CASE("All ADC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.B = tc.reg;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x88);
             CPU8BitArithmetic::ADC_A_R(cpu, instruction);
@@ -229,7 +221,7 @@ TEST_CASE("All ADC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.C = tc.reg;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x89);
             CPU8BitArithmetic::ADC_A_R(cpu, instruction);
@@ -246,7 +238,7 @@ TEST_CASE("All ADC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.D = tc.reg;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x9A);
             CPU8BitArithmetic::ADC_A_R(cpu, instruction);
@@ -263,7 +255,7 @@ TEST_CASE("All ADC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.E = tc.reg;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x9B);
             CPU8BitArithmetic::ADC_A_R(cpu, instruction);
@@ -280,7 +272,7 @@ TEST_CASE("All ADC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.H = tc.reg;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x9C);
             CPU8BitArithmetic::ADC_A_R(cpu, instruction);
@@ -297,7 +289,7 @@ TEST_CASE("All ADC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.L = tc.reg;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x9D);
             CPU8BitArithmetic::ADC_A_R(cpu, instruction);
@@ -314,7 +306,7 @@ TEST_CASE("All ADC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.SetHL(0x1000);
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             std::vector<uint8_t> dummyMemory(0x10000, 0);
             dummyMemory[0x1000] = tc.reg;
@@ -349,7 +341,7 @@ TEST_CASE("All ADC_A_R functions") {
 
             CPU cpu;
             cpu.state.A = tc.A;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x9F);
             CPU8BitArithmetic::ADC_A_R(cpu, instruction);
@@ -555,7 +547,7 @@ TEST_CASE("All SBC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.B = tc.reg;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x98);
             CPU8BitArithmetic::SBC_A_R(cpu, instruction);
@@ -572,7 +564,7 @@ TEST_CASE("All SBC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.C = tc.reg;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x99);
             CPU8BitArithmetic::SBC_A_R(cpu, instruction);
@@ -589,7 +581,7 @@ TEST_CASE("All SBC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.D = tc.reg;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x9A);
             CPU8BitArithmetic::SBC_A_R(cpu, instruction);
@@ -606,7 +598,7 @@ TEST_CASE("All SBC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.E = tc.reg;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x9B);
             CPU8BitArithmetic::SBC_A_R(cpu, instruction);
@@ -623,7 +615,7 @@ TEST_CASE("All SBC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.H = tc.reg;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x9C);
             CPU8BitArithmetic::SBC_A_R(cpu, instruction);
@@ -640,7 +632,7 @@ TEST_CASE("All SBC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.L = tc.reg;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x9D);
             CPU8BitArithmetic::SBC_A_R(cpu, instruction);
@@ -657,7 +649,7 @@ TEST_CASE("All SBC_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
             cpu.state.SetHL(0x1000);
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             std::vector<uint8_t> dummyMemory(0x10000, 0);
             dummyMemory[0x1000] = tc.reg;
@@ -683,7 +675,7 @@ TEST_CASE("All SBC_A_R functions") {
 
             CPU cpu;
             cpu.state.A = tc.A;
-            cpu.state.FlagC = tc.CY;
+            cpu.state.FC = tc.CY;
 
             auto instruction = CreateInstruction(0x97);
             CPU8BitArithmetic::SBC_A_R(cpu, instruction);
