@@ -109,7 +109,7 @@ namespace CPU8BitArithmetic {
         uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, false);
         uint8_t result = b + 1;
 
-        CPUHelper::UpdateFlags(cpu, result, 0, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
+        CPUHelper::UpdateFlags(cpu, result, b, 1, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::False,
             CPUHelper::FlagsType::OverflowBit3, CPUHelper::FlagsType::None);
 
         CPUHelper::SetRegisterValue(cpu, instruction, result);
@@ -121,7 +121,7 @@ namespace CPU8BitArithmetic {
         uint8_t b = CPUHelper::GetRegisterValue(cpu, instruction, false);
         uint8_t result = b - 1;
 
-        CPUHelper::UpdateFlags(cpu, result, 0, b, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,
+        CPUHelper::UpdateFlags(cpu, result, b, 1, false, CPUHelper::FlagsType::ValueZero, CPUHelper::FlagsType::True,
             CPUHelper::FlagsType::BorrowBit4, CPUHelper::FlagsType::None);
 
         CPUHelper::SetRegisterValue(cpu, instruction, result);

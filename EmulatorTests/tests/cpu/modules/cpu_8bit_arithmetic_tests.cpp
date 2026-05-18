@@ -1334,3 +1334,287 @@ TEST_CASE("All CP_A_R functions") {
         }
     }
 }
+
+TEST_CASE("All INC_R functions") {
+    struct TestCase {
+        string name;
+        uint8_t reg;
+        uint8_t expectedResult;
+        bool flagZ;
+        bool flagN;
+        bool flagH;
+        bool flagC;
+    };
+
+    std::vector<TestCase> cases = {
+        {"Inc case 1", 0x00, 0x01, false, false, false, false},
+        {"Inc case 2", 0x10, 0x11, false, false, false, false},
+        {"Half-Carry", 0x0F, 0x10, false, false, true, false},
+        {"Overflow", 0xFF, 0x00, true, false, true, false},
+    };
+
+    SUBCASE("INC_B") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.B = tc.reg;
+
+            auto instruction = CreateInstruction(0x04);
+            CPU8BitArithmetic::INC_R(cpu, instruction);
+
+            CHECK(cpu.state.B == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("INC_C") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.C = tc.reg;
+
+            auto instruction = CreateInstruction(0x0C);
+            CPU8BitArithmetic::INC_R(cpu, instruction);
+
+            CHECK(cpu.state.C == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("INC_D") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.D = tc.reg;
+
+            auto instruction = CreateInstruction(0x14);
+            CPU8BitArithmetic::INC_R(cpu, instruction);
+
+            CHECK(cpu.state.D == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("INC_E") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.E = tc.reg;
+
+            auto instruction = CreateInstruction(0x1C);
+            CPU8BitArithmetic::INC_R(cpu, instruction);
+
+            CHECK(cpu.state.E == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("INC_H") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.H = tc.reg;
+
+            auto instruction = CreateInstruction(0x24);
+            CPU8BitArithmetic::INC_R(cpu, instruction);
+
+            CHECK(cpu.state.H == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("INC_L") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.L = tc.reg;
+
+            auto instruction = CreateInstruction(0x2C);
+            CPU8BitArithmetic::INC_R(cpu, instruction);
+
+            CHECK(cpu.state.L == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("INC_HL") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.SetHL(0x1000);
+
+            std::vector<uint8_t> dummyMemory(0x10000, 0);
+            dummyMemory[0x1000] = tc.reg;
+
+            auto instruction = CreateInstruction(0x34, dummyMemory);
+            CPU8BitArithmetic::INC_R(cpu, instruction);
+
+            CHECK(dummyMemory[0x1000] == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("INC_A") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.A = tc.reg;
+
+            auto instruction = CreateInstruction(0x3C);
+            CPU8BitArithmetic::INC_R(cpu, instruction);
+
+            CHECK(cpu.state.A == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+}
+
+TEST_CASE("All DEC_R functions") {
+    struct TestCase {
+        string name;
+        uint8_t reg;
+        uint8_t expectedResult;
+        bool flagZ;
+        bool flagN;
+        bool flagH;
+        bool flagC;
+    };
+
+    std::vector<TestCase> cases = {
+        {"Dec case 1", 0x01, 0x00, true, true, false, false},
+        {"Dec case 2", 0x11, 0x10, false, true, false, false},
+        {"Half-Carry", 0x10, 0x0F, false, true, true, false},
+        {"Borrow", 0x00, 0xFF, false, true, true, false},
+    };
+
+    SUBCASE("DEC_B") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.B = tc.reg;
+
+            auto instruction = CreateInstruction(0x05);
+            CPU8BitArithmetic::DEC_R(cpu, instruction);
+
+            CHECK(cpu.state.B == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("DEC_C") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.C = tc.reg;
+
+            auto instruction = CreateInstruction(0x0D);
+            CPU8BitArithmetic::DEC_R(cpu, instruction);
+
+            CHECK(cpu.state.C == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("DEC_D") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.D = tc.reg;
+
+            auto instruction = CreateInstruction(0x15);
+            CPU8BitArithmetic::DEC_R(cpu, instruction);
+
+            CHECK(cpu.state.D == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("DEC_E") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.E = tc.reg;
+
+            auto instruction = CreateInstruction(0x1D);
+            CPU8BitArithmetic::DEC_R(cpu, instruction);
+
+            CHECK(cpu.state.E == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("DEC_H") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.H = tc.reg;
+
+            auto instruction = CreateInstruction(0x25);
+            CPU8BitArithmetic::DEC_R(cpu, instruction);
+
+            CHECK(cpu.state.H == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("DEC_L") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.L = tc.reg;
+
+            auto instruction = CreateInstruction(0x2D);
+            CPU8BitArithmetic::DEC_R(cpu, instruction);
+
+            CHECK(cpu.state.L == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("DEC_HL") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.SetHL(0x1000);
+
+            std::vector<uint8_t> dummyMemory(0x10000, 0);
+            dummyMemory[0x1000] = tc.reg;
+
+            auto instruction = CreateInstruction(0x35, dummyMemory);
+            CPU8BitArithmetic::DEC_R(cpu, instruction);
+
+            CHECK(dummyMemory[0x1000] == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+
+    SUBCASE("DEC_A") {
+        for (const auto& tc : cases) {
+            SUBCASE(tc.name.c_str());
+
+            CPU cpu;
+            cpu.state.A = tc.reg;
+
+            auto instruction = CreateInstruction(0x3D);
+            CPU8BitArithmetic::DEC_R(cpu, instruction);
+
+            CHECK(cpu.state.A == tc.expectedResult);
+            CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
+        }
+    }
+}
