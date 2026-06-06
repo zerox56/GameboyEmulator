@@ -34,8 +34,8 @@ TEST_CASE("All ADD_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.B = tc.reg;
 
-            auto instruction = CreateInstruction(0x80);
-            CPU8BitArithmetic::ADD_A_R(cpu, instruction);
+            TestInstruction ti(0x80);
+            CPU8BitArithmetic::ADD_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -50,8 +50,8 @@ TEST_CASE("All ADD_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.C = tc.reg;
 
-            auto instruction = CreateInstruction(0x81);
-            CPU8BitArithmetic::ADD_A_R(cpu, instruction);
+            TestInstruction ti(0x81);
+            CPU8BitArithmetic::ADD_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -66,8 +66,8 @@ TEST_CASE("All ADD_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.D = tc.reg;
 
-            auto instruction = CreateInstruction(0x82);
-            CPU8BitArithmetic::ADD_A_R(cpu, instruction);
+            TestInstruction ti(0x82);
+            CPU8BitArithmetic::ADD_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -82,8 +82,8 @@ TEST_CASE("All ADD_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.E = tc.reg;
 
-            auto instruction = CreateInstruction(0x83);
-            CPU8BitArithmetic::ADD_A_R(cpu, instruction);
+            TestInstruction ti(0x83);
+            CPU8BitArithmetic::ADD_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -98,8 +98,8 @@ TEST_CASE("All ADD_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.H = tc.reg;
 
-            auto instruction = CreateInstruction(0x84);
-            CPU8BitArithmetic::ADD_A_R(cpu, instruction);
+            TestInstruction ti(0x84);
+            CPU8BitArithmetic::ADD_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -114,8 +114,8 @@ TEST_CASE("All ADD_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.L = tc.reg;
 
-            auto instruction = CreateInstruction(0x85);
-            CPU8BitArithmetic::ADD_A_R(cpu, instruction);
+            TestInstruction ti(0x85);
+            CPU8BitArithmetic::ADD_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -130,11 +130,10 @@ TEST_CASE("All ADD_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.SetHL(0x1000);
 
-            std::vector<uint8_t> dummyMemory(0x10000, 0);
-            dummyMemory[0x1000] = tc.reg;
+            TestInstruction ti(0x86);
+            ti.memory[0x1000] = tc.reg;
 
-            auto instruction = CreateInstruction(0x86, dummyMemory);
-            CPU8BitArithmetic::ADD_A_R(cpu, instruction);
+            CPU8BitArithmetic::ADD_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -158,8 +157,8 @@ TEST_CASE("All ADD_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
 
-            auto instruction = CreateInstruction(0x87);
-            CPU8BitArithmetic::ADD_A_R(cpu, instruction);
+            TestInstruction ti(0x87);
+            CPU8BitArithmetic::ADD_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -206,8 +205,8 @@ TEST_CASE("All ADC_A_R functions") {
             cpu.state.B = tc.reg;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x88);
-            CPU8BitArithmetic::ADC_A_R(cpu, instruction);
+            TestInstruction ti(0x88);
+            CPU8BitArithmetic::ADC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -223,8 +222,8 @@ TEST_CASE("All ADC_A_R functions") {
             cpu.state.C = tc.reg;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x89);
-            CPU8BitArithmetic::ADC_A_R(cpu, instruction);
+            TestInstruction ti(0x89);
+            CPU8BitArithmetic::ADC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -240,8 +239,8 @@ TEST_CASE("All ADC_A_R functions") {
             cpu.state.D = tc.reg;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x9A);
-            CPU8BitArithmetic::ADC_A_R(cpu, instruction);
+            TestInstruction ti(0x9A);
+            CPU8BitArithmetic::ADC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -257,8 +256,8 @@ TEST_CASE("All ADC_A_R functions") {
             cpu.state.E = tc.reg;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x9B);
-            CPU8BitArithmetic::ADC_A_R(cpu, instruction);
+            TestInstruction ti(0x9B);
+            CPU8BitArithmetic::ADC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -274,8 +273,8 @@ TEST_CASE("All ADC_A_R functions") {
             cpu.state.H = tc.reg;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x9C);
-            CPU8BitArithmetic::ADC_A_R(cpu, instruction);
+            TestInstruction ti(0x9C);
+            CPU8BitArithmetic::ADC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -291,8 +290,8 @@ TEST_CASE("All ADC_A_R functions") {
             cpu.state.L = tc.reg;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x9D);
-            CPU8BitArithmetic::ADC_A_R(cpu, instruction);
+            TestInstruction ti(0x9D);
+            CPU8BitArithmetic::ADC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -308,11 +307,10 @@ TEST_CASE("All ADC_A_R functions") {
             cpu.state.SetHL(0x1000);
             cpu.state.FC = tc.CY;
 
-            std::vector<uint8_t> dummyMemory(0x10000, 0);
-            dummyMemory[0x1000] = tc.reg;
+            TestInstruction ti(0x9E);
+            ti.memory[0x1000] = tc.reg;
 
-            auto instruction = CreateInstruction(0x9E, dummyMemory);
-            CPU8BitArithmetic::ADC_A_R(cpu, instruction);
+            CPU8BitArithmetic::ADC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -343,8 +341,8 @@ TEST_CASE("All ADC_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x9F);
-            CPU8BitArithmetic::ADC_A_R(cpu, instruction);
+            TestInstruction ti(0x9F);
+            CPU8BitArithmetic::ADC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -382,8 +380,8 @@ TEST_CASE("All SUB_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.B = tc.reg;
 
-            auto instruction = CreateInstruction(0x90);
-            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+            TestInstruction ti(0x90);
+            CPU8BitArithmetic::SUB_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -398,8 +396,8 @@ TEST_CASE("All SUB_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.C = tc.reg;
 
-            auto instruction = CreateInstruction(0x91);
-            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+            TestInstruction ti(0x91);
+            CPU8BitArithmetic::SUB_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -414,8 +412,8 @@ TEST_CASE("All SUB_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.D = tc.reg;
 
-            auto instruction = CreateInstruction(0x92);
-            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+            TestInstruction ti(0x92);
+            CPU8BitArithmetic::SUB_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -430,8 +428,8 @@ TEST_CASE("All SUB_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.E = tc.reg;
 
-            auto instruction = CreateInstruction(0x93);
-            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+            TestInstruction ti(0x93);
+            CPU8BitArithmetic::SUB_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -446,8 +444,8 @@ TEST_CASE("All SUB_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.H = tc.reg;
 
-            auto instruction = CreateInstruction(0x94);
-            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+            TestInstruction ti(0x94);
+            CPU8BitArithmetic::SUB_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -462,8 +460,8 @@ TEST_CASE("All SUB_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.L = tc.reg;
 
-            auto instruction = CreateInstruction(0x95);
-            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+            TestInstruction ti(0x95);
+            CPU8BitArithmetic::SUB_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -478,11 +476,10 @@ TEST_CASE("All SUB_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.SetHL(0x1000);
 
-            std::vector<uint8_t> dummyMemory(0x10000, 0);
-            dummyMemory[0x1000] = tc.reg;
+            TestInstruction ti(0x96);
+            ti.memory[0x1000] = tc.reg;
 
-            auto instruction = CreateInstruction(0x96, dummyMemory);
-            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+            CPU8BitArithmetic::SUB_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -501,8 +498,8 @@ TEST_CASE("All SUB_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
 
-            auto instruction = CreateInstruction(0x97);
-            CPU8BitArithmetic::SUB_A_R(cpu, instruction);
+            TestInstruction ti(0x97);
+            CPU8BitArithmetic::SUB_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -549,8 +546,8 @@ TEST_CASE("All SBC_A_R functions") {
             cpu.state.B = tc.reg;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x98);
-            CPU8BitArithmetic::SBC_A_R(cpu, instruction);
+            TestInstruction ti(0x98);
+            CPU8BitArithmetic::SBC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -566,8 +563,8 @@ TEST_CASE("All SBC_A_R functions") {
             cpu.state.C = tc.reg;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x99);
-            CPU8BitArithmetic::SBC_A_R(cpu, instruction);
+            TestInstruction ti(0x99);
+            CPU8BitArithmetic::SBC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -583,8 +580,8 @@ TEST_CASE("All SBC_A_R functions") {
             cpu.state.D = tc.reg;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x9A);
-            CPU8BitArithmetic::SBC_A_R(cpu, instruction);
+            TestInstruction ti(0x9A);
+            CPU8BitArithmetic::SBC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -600,8 +597,8 @@ TEST_CASE("All SBC_A_R functions") {
             cpu.state.E = tc.reg;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x9B);
-            CPU8BitArithmetic::SBC_A_R(cpu, instruction);
+            TestInstruction ti(0x9B);
+            CPU8BitArithmetic::SBC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -617,8 +614,8 @@ TEST_CASE("All SBC_A_R functions") {
             cpu.state.H = tc.reg;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x9C);
-            CPU8BitArithmetic::SBC_A_R(cpu, instruction);
+            TestInstruction ti(0x9C);
+            CPU8BitArithmetic::SBC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -634,8 +631,8 @@ TEST_CASE("All SBC_A_R functions") {
             cpu.state.L = tc.reg;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x9D);
-            CPU8BitArithmetic::SBC_A_R(cpu, instruction);
+            TestInstruction ti(0x9D);
+            CPU8BitArithmetic::SBC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -651,11 +648,10 @@ TEST_CASE("All SBC_A_R functions") {
             cpu.state.SetHL(0x1000);
             cpu.state.FC = tc.CY;
 
-            std::vector<uint8_t> dummyMemory(0x10000, 0);
-            dummyMemory[0x1000] = tc.reg;
+            TestInstruction ti(0x9E);
+            ti.memory[0x1000] = tc.reg;
 
-            auto instruction = CreateInstruction(0x9E, dummyMemory);
-            CPU8BitArithmetic::SBC_A_R(cpu, instruction);
+            CPU8BitArithmetic::SBC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -677,8 +673,8 @@ TEST_CASE("All SBC_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.FC = tc.CY;
 
-            auto instruction = CreateInstruction(0x97);
-            CPU8BitArithmetic::SBC_A_R(cpu, instruction);
+            TestInstruction ti(0x97);
+            CPU8BitArithmetic::SBC_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -715,8 +711,8 @@ TEST_CASE("All AND_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.B = tc.reg;
 
-            auto instruction = CreateInstruction(0xA0);
-            CPU8BitArithmetic::AND_A_R(cpu, instruction);
+            TestInstruction ti(0xA0);
+            CPU8BitArithmetic::AND_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -731,8 +727,8 @@ TEST_CASE("All AND_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.C = tc.reg;
 
-            auto instruction = CreateInstruction(0xA1);
-            CPU8BitArithmetic::AND_A_R(cpu, instruction);
+            TestInstruction ti(0xA1);
+            CPU8BitArithmetic::AND_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -747,8 +743,8 @@ TEST_CASE("All AND_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.D = tc.reg;
 
-            auto instruction = CreateInstruction(0xA2);
-            CPU8BitArithmetic::AND_A_R(cpu, instruction);
+            TestInstruction ti(0xA2);
+            CPU8BitArithmetic::AND_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -763,8 +759,8 @@ TEST_CASE("All AND_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.E = tc.reg;
 
-            auto instruction = CreateInstruction(0xA3);
-            CPU8BitArithmetic::AND_A_R(cpu, instruction);
+            TestInstruction ti(0xA3);
+            CPU8BitArithmetic::AND_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -779,8 +775,8 @@ TEST_CASE("All AND_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.H = tc.reg;
 
-            auto instruction = CreateInstruction(0xA4);
-            CPU8BitArithmetic::AND_A_R(cpu, instruction);
+            TestInstruction ti(0xA4);
+            CPU8BitArithmetic::AND_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -795,8 +791,8 @@ TEST_CASE("All AND_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.L = tc.reg;
 
-            auto instruction = CreateInstruction(0xA5);
-            CPU8BitArithmetic::AND_A_R(cpu, instruction);
+            TestInstruction ti(0xA5);
+            CPU8BitArithmetic::AND_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -811,11 +807,10 @@ TEST_CASE("All AND_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.SetHL(0x1000);
 
-            std::vector<uint8_t> dummyMemory(0x10000, 0);
-            dummyMemory[0x1000] = tc.reg;
+            TestInstruction ti(0xA6);
+            ti.memory[0x1000] = tc.reg;
 
-            auto instruction = CreateInstruction(0xA6, dummyMemory);
-            CPU8BitArithmetic::AND_A_R(cpu, instruction);
+            CPU8BitArithmetic::AND_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -838,8 +833,8 @@ TEST_CASE("All AND_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
 
-            auto instruction = CreateInstruction(0x87);
-            CPU8BitArithmetic::AND_A_R(cpu, instruction);
+            TestInstruction ti(0x87);
+            CPU8BitArithmetic::AND_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -876,8 +871,8 @@ TEST_CASE("All XOR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.B = tc.reg;
 
-            auto instruction = CreateInstruction(0xA8);
-            CPU8BitArithmetic::XOR_A_R(cpu, instruction);
+            TestInstruction ti(0xA8);
+            CPU8BitArithmetic::XOR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -892,8 +887,8 @@ TEST_CASE("All XOR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.C = tc.reg;
 
-            auto instruction = CreateInstruction(0xA9);
-            CPU8BitArithmetic::XOR_A_R(cpu, instruction);
+            TestInstruction ti(0xA9);
+            CPU8BitArithmetic::XOR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -908,8 +903,8 @@ TEST_CASE("All XOR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.D = tc.reg;
 
-            auto instruction = CreateInstruction(0xAA);
-            CPU8BitArithmetic::XOR_A_R(cpu, instruction);
+            TestInstruction ti(0xAA);
+            CPU8BitArithmetic::XOR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -924,8 +919,8 @@ TEST_CASE("All XOR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.E = tc.reg;
 
-            auto instruction = CreateInstruction(0xAB);
-            CPU8BitArithmetic::XOR_A_R(cpu, instruction);
+            TestInstruction ti(0xAB);
+            CPU8BitArithmetic::XOR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -940,8 +935,8 @@ TEST_CASE("All XOR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.H = tc.reg;
 
-            auto instruction = CreateInstruction(0xAC);
-            CPU8BitArithmetic::XOR_A_R(cpu, instruction);
+            TestInstruction ti(0xAC);
+            CPU8BitArithmetic::XOR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -956,8 +951,8 @@ TEST_CASE("All XOR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.L = tc.reg;
 
-            auto instruction = CreateInstruction(0xAD);
-            CPU8BitArithmetic::XOR_A_R(cpu, instruction);
+            TestInstruction ti(0xAD);
+            CPU8BitArithmetic::XOR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -972,11 +967,10 @@ TEST_CASE("All XOR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.SetHL(0x1000);
 
-            std::vector<uint8_t> dummyMemory(0x10000, 0);
-            dummyMemory[0x1000] = tc.reg;
+            TestInstruction ti(0xAE);
+            ti.memory[0x1000] = tc.reg;
 
-            auto instruction = CreateInstruction(0xAE, dummyMemory);
-            CPU8BitArithmetic::XOR_A_R(cpu, instruction);
+            CPU8BitArithmetic::XOR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -999,8 +993,8 @@ TEST_CASE("All XOR_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
 
-            auto instruction = CreateInstruction(0xAF);
-            CPU8BitArithmetic::XOR_A_R(cpu, instruction);
+            TestInstruction ti(0xAF);
+            CPU8BitArithmetic::XOR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1037,8 +1031,8 @@ TEST_CASE("All OR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.B = tc.reg;
 
-            auto instruction = CreateInstruction(0xB0);
-            CPU8BitArithmetic::OR_A_R(cpu, instruction);
+            TestInstruction ti(0xB0);
+            CPU8BitArithmetic::OR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1053,8 +1047,8 @@ TEST_CASE("All OR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.C = tc.reg;
 
-            auto instruction = CreateInstruction(0xB1);
-            CPU8BitArithmetic::OR_A_R(cpu, instruction);
+            TestInstruction ti(0xB1);
+            CPU8BitArithmetic::OR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1069,8 +1063,8 @@ TEST_CASE("All OR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.D = tc.reg;
 
-            auto instruction = CreateInstruction(0xB2);
-            CPU8BitArithmetic::OR_A_R(cpu, instruction);
+            TestInstruction ti(0xB2);
+            CPU8BitArithmetic::OR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1085,8 +1079,8 @@ TEST_CASE("All OR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.E = tc.reg;
 
-            auto instruction = CreateInstruction(0xB3);
-            CPU8BitArithmetic::OR_A_R(cpu, instruction);
+            TestInstruction ti(0xB3);
+            CPU8BitArithmetic::OR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1101,8 +1095,8 @@ TEST_CASE("All OR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.H = tc.reg;
 
-            auto instruction = CreateInstruction(0xB4);
-            CPU8BitArithmetic::OR_A_R(cpu, instruction);
+            TestInstruction ti(0xB4);
+            CPU8BitArithmetic::OR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1117,8 +1111,8 @@ TEST_CASE("All OR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.L = tc.reg;
 
-            auto instruction = CreateInstruction(0xB5);
-            CPU8BitArithmetic::OR_A_R(cpu, instruction);
+            TestInstruction ti(0xB5);
+            CPU8BitArithmetic::OR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1133,11 +1127,10 @@ TEST_CASE("All OR_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.SetHL(0x1000);
 
-            std::vector<uint8_t> dummyMemory(0x10000, 0);
-            dummyMemory[0x1000] = tc.reg;
+            TestInstruction ti(0xB6);
+            ti.memory[0x1000] = tc.reg;
 
-            auto instruction = CreateInstruction(0xB6, dummyMemory);
-            CPU8BitArithmetic::OR_A_R(cpu, instruction);
+            CPU8BitArithmetic::OR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1160,8 +1153,8 @@ TEST_CASE("All OR_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
 
-            auto instruction = CreateInstruction(0xB7);
-            CPU8BitArithmetic::OR_A_R(cpu, instruction);
+            TestInstruction ti(0xB7);
+            CPU8BitArithmetic::OR_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1199,8 +1192,8 @@ TEST_CASE("All CP_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.B = tc.reg;
 
-            auto instruction = CreateInstruction(0xB8);
-            CPU8BitArithmetic::CP_A_R(cpu, instruction);
+            TestInstruction ti(0xB8);
+            CPU8BitArithmetic::CP_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1215,8 +1208,8 @@ TEST_CASE("All CP_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.C = tc.reg;
 
-            auto instruction = CreateInstruction(0xB9);
-            CPU8BitArithmetic::CP_A_R(cpu, instruction);
+            TestInstruction ti(0xB9);
+            CPU8BitArithmetic::CP_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1231,8 +1224,8 @@ TEST_CASE("All CP_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.D = tc.reg;
 
-            auto instruction = CreateInstruction(0xBA);
-            CPU8BitArithmetic::CP_A_R(cpu, instruction);
+            TestInstruction ti(0xBA);
+            CPU8BitArithmetic::CP_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1247,8 +1240,8 @@ TEST_CASE("All CP_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.E = tc.reg;
 
-            auto instruction = CreateInstruction(0xBB);
-            CPU8BitArithmetic::CP_A_R(cpu, instruction);
+            TestInstruction ti(0xBB);
+            CPU8BitArithmetic::CP_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1263,8 +1256,8 @@ TEST_CASE("All CP_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.H = tc.reg;
 
-            auto instruction = CreateInstruction(0xBC);
-            CPU8BitArithmetic::CP_A_R(cpu, instruction);
+            TestInstruction ti(0xBC);
+            CPU8BitArithmetic::CP_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1279,8 +1272,8 @@ TEST_CASE("All CP_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.L = tc.reg;
 
-            auto instruction = CreateInstruction(0xBD);
-            CPU8BitArithmetic::CP_A_R(cpu, instruction);
+            TestInstruction ti(0xBD);
+            CPU8BitArithmetic::CP_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1295,11 +1288,10 @@ TEST_CASE("All CP_A_R functions") {
             cpu.state.A = tc.A;
             cpu.state.SetHL(0x1000);
 
-            std::vector<uint8_t> dummyMemory(0x10000, 0);
-            dummyMemory[0x1000] = tc.reg;
+            TestInstruction ti(0xBE);
+            ti.memory[0x1000] = tc.reg;
 
-            auto instruction = CreateInstruction(0xBE, dummyMemory);
-            CPU8BitArithmetic::CP_A_R(cpu, instruction);
+            CPU8BitArithmetic::CP_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1318,8 +1310,8 @@ TEST_CASE("All CP_A_R functions") {
             CPU cpu;
             cpu.state.A = tc.A;
 
-            auto instruction = CreateInstruction(0xBF);
-            CPU8BitArithmetic::CP_A_R(cpu, instruction);
+            TestInstruction ti(0xBF);
+            CPU8BitArithmetic::CP_A_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1352,8 +1344,8 @@ TEST_CASE("All INC_R functions") {
             CPU cpu;
             cpu.state.B = tc.reg;
 
-            auto instruction = CreateInstruction(0x04);
-            CPU8BitArithmetic::INC_R(cpu, instruction);
+            TestInstruction ti(0x04);
+            CPU8BitArithmetic::INC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.B == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1367,8 +1359,8 @@ TEST_CASE("All INC_R functions") {
             CPU cpu;
             cpu.state.C = tc.reg;
 
-            auto instruction = CreateInstruction(0x0C);
-            CPU8BitArithmetic::INC_R(cpu, instruction);
+            TestInstruction ti(0x0C);
+            CPU8BitArithmetic::INC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.C == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1382,8 +1374,8 @@ TEST_CASE("All INC_R functions") {
             CPU cpu;
             cpu.state.D = tc.reg;
 
-            auto instruction = CreateInstruction(0x14);
-            CPU8BitArithmetic::INC_R(cpu, instruction);
+            TestInstruction ti(0x14);
+            CPU8BitArithmetic::INC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.D == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1397,8 +1389,8 @@ TEST_CASE("All INC_R functions") {
             CPU cpu;
             cpu.state.E = tc.reg;
 
-            auto instruction = CreateInstruction(0x1C);
-            CPU8BitArithmetic::INC_R(cpu, instruction);
+            TestInstruction ti(0x1C);
+            CPU8BitArithmetic::INC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.E == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1412,8 +1404,8 @@ TEST_CASE("All INC_R functions") {
             CPU cpu;
             cpu.state.H = tc.reg;
 
-            auto instruction = CreateInstruction(0x24);
-            CPU8BitArithmetic::INC_R(cpu, instruction);
+            TestInstruction ti(0x24);
+            CPU8BitArithmetic::INC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.H == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1427,8 +1419,8 @@ TEST_CASE("All INC_R functions") {
             CPU cpu;
             cpu.state.L = tc.reg;
 
-            auto instruction = CreateInstruction(0x2C);
-            CPU8BitArithmetic::INC_R(cpu, instruction);
+            TestInstruction ti(0x2C);
+            CPU8BitArithmetic::INC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.L == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1442,13 +1434,12 @@ TEST_CASE("All INC_R functions") {
             CPU cpu;
             cpu.state.SetHL(0x1000);
 
-            std::vector<uint8_t> dummyMemory(0x10000, 0);
-            dummyMemory[0x1000] = tc.reg;
+            TestInstruction ti(0x34);
+            ti.memory[0x1000] = tc.reg;
 
-            auto instruction = CreateInstruction(0x34, dummyMemory);
-            CPU8BitArithmetic::INC_R(cpu, instruction);
+            CPU8BitArithmetic::INC_R(cpu, ti.instruction);
 
-            CHECK(dummyMemory[0x1000] == tc.expectedResult);
+            CHECK(ti.memory[0x1000] == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
         }
     }
@@ -1460,8 +1451,8 @@ TEST_CASE("All INC_R functions") {
             CPU cpu;
             cpu.state.A = tc.reg;
 
-            auto instruction = CreateInstruction(0x3C);
-            CPU8BitArithmetic::INC_R(cpu, instruction);
+            TestInstruction ti(0x3C);
+            CPU8BitArithmetic::INC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1494,8 +1485,8 @@ TEST_CASE("All DEC_R functions") {
             CPU cpu;
             cpu.state.B = tc.reg;
 
-            auto instruction = CreateInstruction(0x05);
-            CPU8BitArithmetic::DEC_R(cpu, instruction);
+            TestInstruction ti(0x05);
+            CPU8BitArithmetic::DEC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.B == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1509,8 +1500,8 @@ TEST_CASE("All DEC_R functions") {
             CPU cpu;
             cpu.state.C = tc.reg;
 
-            auto instruction = CreateInstruction(0x0D);
-            CPU8BitArithmetic::DEC_R(cpu, instruction);
+            TestInstruction ti(0x0D);
+            CPU8BitArithmetic::DEC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.C == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1524,8 +1515,8 @@ TEST_CASE("All DEC_R functions") {
             CPU cpu;
             cpu.state.D = tc.reg;
 
-            auto instruction = CreateInstruction(0x15);
-            CPU8BitArithmetic::DEC_R(cpu, instruction);
+            TestInstruction ti(0x15);
+            CPU8BitArithmetic::DEC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.D == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1539,8 +1530,8 @@ TEST_CASE("All DEC_R functions") {
             CPU cpu;
             cpu.state.E = tc.reg;
 
-            auto instruction = CreateInstruction(0x1D);
-            CPU8BitArithmetic::DEC_R(cpu, instruction);
+            TestInstruction ti(0x1D);
+            CPU8BitArithmetic::DEC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.E == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1554,8 +1545,8 @@ TEST_CASE("All DEC_R functions") {
             CPU cpu;
             cpu.state.H = tc.reg;
 
-            auto instruction = CreateInstruction(0x25);
-            CPU8BitArithmetic::DEC_R(cpu, instruction);
+            TestInstruction ti(0x25);
+            CPU8BitArithmetic::DEC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.H == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1569,8 +1560,8 @@ TEST_CASE("All DEC_R functions") {
             CPU cpu;
             cpu.state.L = tc.reg;
 
-            auto instruction = CreateInstruction(0x2D);
-            CPU8BitArithmetic::DEC_R(cpu, instruction);
+            TestInstruction ti(0x2D);
+            CPU8BitArithmetic::DEC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.L == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1584,13 +1575,12 @@ TEST_CASE("All DEC_R functions") {
             CPU cpu;
             cpu.state.SetHL(0x1000);
 
-            std::vector<uint8_t> dummyMemory(0x10000, 0);
-            dummyMemory[0x1000] = tc.reg;
+            TestInstruction ti(0x35);
+            ti.memory[0x1000] = tc.reg;
 
-            auto instruction = CreateInstruction(0x35, dummyMemory);
-            CPU8BitArithmetic::DEC_R(cpu, instruction);
+            CPU8BitArithmetic::DEC_R(cpu, ti.instruction);
 
-            CHECK(dummyMemory[0x1000] == tc.expectedResult);
+            CHECK(ti.memory[0x1000] == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
         }
     }
@@ -1602,8 +1592,8 @@ TEST_CASE("All DEC_R functions") {
             CPU cpu;
             cpu.state.A = tc.reg;
 
-            auto instruction = CreateInstruction(0x3D);
-            CPU8BitArithmetic::DEC_R(cpu, instruction);
+            TestInstruction ti(0x3D);
+            CPU8BitArithmetic::DEC_R(cpu, ti.instruction);
 
             CHECK(cpu.state.A == tc.expectedResult);
             CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
@@ -1635,8 +1625,8 @@ TEST_CASE("CPL") {
         CPU cpu;
         cpu.state.A = tc.A;
 
-        auto instruction = CreateInstruction(0x2F);
-        CPU8BitArithmetic::CPL(cpu, instruction);
+        TestInstruction ti(0x2F);
+        CPU8BitArithmetic::CPL(cpu, ti.instruction);
 
         CHECK(cpu.state.A == tc.expectedResult);
         CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);

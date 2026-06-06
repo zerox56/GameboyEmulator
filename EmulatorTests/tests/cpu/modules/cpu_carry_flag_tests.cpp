@@ -25,8 +25,8 @@ TEST_CASE("CCF") {
         CPU cpu;
         cpu.state.FC = tc.CY;
 
-        auto instruction = CreateInstruction(0x3F);
-        CPUCarryFlag::CCF(cpu, instruction);
+        TestInstruction ti(0x3F);
+        CPUCarryFlag::CCF(cpu, ti.instruction);
 
         CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
     }
@@ -53,8 +53,8 @@ TEST_CASE("SCF") {
         CPU cpu;
         cpu.state.FC = tc.CY;
 
-        auto instruction = CreateInstruction(0x37);
-        CPUCarryFlag::SCF(cpu, instruction);
+        TestInstruction ti(0x37);
+        CPUCarryFlag::SCF(cpu, ti.instruction);
 
         CheckFlags(cpu, tc.flagZ, tc.flagN, tc.flagH, tc.flagC);
     }

@@ -29,8 +29,8 @@ TEST_CASE("INC_BC") {
         CPU cpu;
         cpu.state.SetBC(tc.reg);
 
-        auto instruction = CreateInstruction(0x03);
-        CPU16BitArithmetic::INC_BC(cpu, instruction);
+        TestInstruction ti(0x03);
+        CPU16BitArithmetic::INC_BC(cpu, ti.instruction);
 
         CHECK(cpu.state.GetBC() == tc.expectedResult);
     }
@@ -43,8 +43,8 @@ TEST_CASE("INC_DE") {
         CPU cpu;
         cpu.state.SetDE(tc.reg);
 
-        auto instruction = CreateInstruction(0x13);
-        CPU16BitArithmetic::INC_DE(cpu, instruction);
+        TestInstruction ti(0x13);
+        CPU16BitArithmetic::INC_DE(cpu, ti.instruction);
 
         CHECK(cpu.state.GetDE() == tc.expectedResult);
     }
@@ -57,8 +57,8 @@ TEST_CASE("INC_HL") {
         CPU cpu;
         cpu.state.SetHL(tc.reg);
 
-        auto instruction = CreateInstruction(0x23);
-        CPU16BitArithmetic::INC_HL(cpu, instruction);
+        TestInstruction ti(0x23);
+        CPU16BitArithmetic::INC_HL(cpu, ti.instruction);
 
         CHECK(cpu.state.GetHL() == tc.expectedResult);
     }
@@ -71,8 +71,8 @@ TEST_CASE("INC_SP") {
         CPU cpu;
         cpu.state.SP = tc.reg;
 
-        auto instruction = CreateInstruction(0x33);
-        CPU16BitArithmetic::INC_SP(cpu, instruction);
+        TestInstruction ti(0x33);
+        CPU16BitArithmetic::INC_SP(cpu, ti.instruction);
 
         CHECK(cpu.state.SP == tc.expectedResult);
     }
@@ -85,8 +85,8 @@ TEST_CASE("DEC_BC") {
         CPU cpu;
         cpu.state.SetBC(tc.reg);
 
-        auto instruction = CreateInstruction(0x0B);
-        CPU16BitArithmetic::DEC_BC(cpu, instruction);
+        TestInstruction ti(0x0B);
+        CPU16BitArithmetic::DEC_BC(cpu, ti.instruction);
 
         CHECK(cpu.state.GetBC() == tc.expectedResult);
     }
@@ -99,8 +99,8 @@ TEST_CASE("DEC_DE") {
         CPU cpu;
         cpu.state.SetDE(tc.reg);
 
-        auto instruction = CreateInstruction(0x1B);
-        CPU16BitArithmetic::DEC_DE(cpu, instruction);
+        TestInstruction ti(0x1B);
+        CPU16BitArithmetic::DEC_DE(cpu, ti.instruction);
 
         CHECK(cpu.state.GetDE() == tc.expectedResult);
     }
@@ -113,8 +113,8 @@ TEST_CASE("DEC_HL") {
         CPU cpu;
         cpu.state.SetHL(tc.reg);
 
-        auto instruction = CreateInstruction(0x2B);
-        CPU16BitArithmetic::DEC_HL(cpu, instruction);
+        TestInstruction ti(0x2B);
+        CPU16BitArithmetic::DEC_HL(cpu, ti.instruction);
 
         CHECK(cpu.state.GetHL() == tc.expectedResult);
     }
@@ -127,8 +127,8 @@ TEST_CASE("DEC_SP") {
         CPU cpu;
         cpu.state.SP = tc.reg;
 
-        auto instruction = CreateInstruction(0x3B);
-        CPU16BitArithmetic::DEC_SP(cpu, instruction);
+        TestInstruction ti(0x3B);
+        CPU16BitArithmetic::DEC_SP(cpu, ti.instruction);
 
         CHECK(cpu.state.SP == tc.expectedResult);
     }
