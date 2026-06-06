@@ -4,11 +4,11 @@
 namespace CPUJump {
 	// Jump instructions
 	CPU::CounterAction JP_N16(CPU&, CPU::Instruction);
-	CPU::CounterAction JR_N16(CPU&, CPU::Instruction);
-	CPU::CounterAction JR_NZ_N16(CPU&, CPU::Instruction);
-	CPU::CounterAction JR_Z_N16(CPU&, CPU::Instruction);
-	CPU::CounterAction JR_NC_N16(CPU&, CPU::Instruction);
-	CPU::CounterAction JR_C_N16(CPU&, CPU::Instruction);
+	CPU::CounterAction JR_N8(CPU&, CPU::Instruction);
+	CPU::CounterAction JR_NZ_N8(CPU&, CPU::Instruction);
+	CPU::CounterAction JR_Z_N8(CPU&, CPU::Instruction);
+	CPU::CounterAction JR_NC_N8(CPU&, CPU::Instruction);
+	CPU::CounterAction JR_C_N8(CPU&, CPU::Instruction);
 
 	const uint8_t RSTOffset = 0x08;
 	const uint8_t RSTStart = 0xC7;

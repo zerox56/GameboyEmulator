@@ -131,32 +131,32 @@ std::vector<CPU::OpcodeFunc> CPU::InitializeOpcodeTable() {
     table[0x12] = CPULoad::LD_DE_A;
     table[0x13] = CPU16BitArithmetic::INC_DE;
     table[0x16] = CPULoad::LD_D_N8;
-    table[0x18] = CPUJump::JR_N16;
+    table[0x18] = CPUJump::JR_N8;
     table[0x1A] = CPULoad::LD_A_DE;
     table[0x1B] = CPU16BitArithmetic::DEC_DE;
     table[0x1E] = CPULoad::LD_E_N8;
 
     // 0x20–0x2F
-    table[0x20] = CPUJump::JR_NZ_N16;
+    table[0x20] = CPUJump::JR_NZ_N8;
     table[0x21] = CPULoad::LD_HL_N16;
     table[0x22] = CPULoad::LD_INC_HL_A;
     table[0x23] = CPU16BitArithmetic::INC_HL;
     table[0x26] = CPULoad::LD_H_N8;
     table[0x27] = CPUMisc::DAA;
-    table[0x28] = CPUJump::JR_Z_N16;
+    table[0x28] = CPUJump::JR_Z_N8;
     table[0x2A] = CPULoad::LD_A_INC_HL;
     table[0x2B] = CPU16BitArithmetic::DEC_HL;
     table[0x2E] = CPULoad::LD_L_N8;
     table[0x2F] = CPU8BitArithmetic::CPL;
 
     // 0x30–0x3F
-    table[0x30] = CPUJump::JR_NC_N16;
+    table[0x30] = CPUJump::JR_NC_N8;
     table[0x31] = CPULoad::LD_SP_N16;
     table[0x32] = CPULoad::LD_DEC_HL_A;
     table[0x33] = CPU16BitArithmetic::INC_SP;
     table[0x36] = CPULoad::LD_HL_N8;
     table[0x37] = CPUCarryFlag::SCF;
-    table[0x38] = CPUJump::JR_C_N16;
+    table[0x38] = CPUJump::JR_C_N8;
     table[0x3A] = CPULoad::LD_A_DEC_HL;
     table[0x3B] = CPU16BitArithmetic::DEC_SP;
     table[0x3E] = CPULoad::LD_A_N8;
@@ -253,10 +253,10 @@ void CPU::ExecuteOpcode(std::vector<uint8_t>& memory, uint16_t& pc) {
         case CPU::CounterAction::Advance:
         case CPU::CounterAction::AdvanceSkipIME:
         case CPU::CounterAction::BitShift:
+        case CPU::CounterAction::Jump:
         default:
             pc += instructionBytes;
             break;
-        case CPU::CounterAction::Jump:
         case CPU::CounterAction::Wait:
             break;
     }

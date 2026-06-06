@@ -8,7 +8,7 @@ namespace CPUJump {
         return CPU::CounterAction::Jump;
     }
 
-    CPU::CounterAction CPUJump::JR_N16(CPU& cpu, CPU::Instruction instruction) {
+    CPU::CounterAction CPUJump::JR_N8(CPU& cpu, CPU::Instruction instruction) {
         if (instruction.H == 0x00) {
             return CPU::CounterAction::Advance;
         }
@@ -18,20 +18,20 @@ namespace CPUJump {
         return CPU::CounterAction::Jump;
     }
 
-    CPU::CounterAction CPUJump::JR_NZ_N16(CPU& cpu, CPU::Instruction instruction) {
-        return cpu.state.FZ == 0 ? JR_N16(cpu, instruction) : CPU::CounterAction::Advance;
+    CPU::CounterAction CPUJump::JR_NZ_N8(CPU& cpu, CPU::Instruction instruction) {
+        return cpu.state.FZ == 0 ? JR_N8(cpu, instruction) : CPU::CounterAction::Advance;
     }
 
-    CPU::CounterAction CPUJump::JR_Z_N16(CPU& cpu, CPU::Instruction instruction) {
-        return cpu.state.FZ == 1 ? JR_N16(cpu, instruction) : CPU::CounterAction::Advance;
+    CPU::CounterAction CPUJump::JR_Z_N8(CPU& cpu, CPU::Instruction instruction) {
+        return cpu.state.FZ == 1 ? JR_N8(cpu, instruction) : CPU::CounterAction::Advance;
     }
 
-    CPU::CounterAction CPUJump::JR_NC_N16(CPU& cpu, CPU::Instruction instruction) {
-        return cpu.state.FC == 0 ? JR_N16(cpu, instruction) : CPU::CounterAction::Advance;
+    CPU::CounterAction CPUJump::JR_NC_N8(CPU& cpu, CPU::Instruction instruction) {
+        return cpu.state.FC == 0 ? JR_N8(cpu, instruction) : CPU::CounterAction::Advance;
     }
 
-    CPU::CounterAction CPUJump::JR_C_N16(CPU& cpu, CPU::Instruction instruction) {
-        return cpu.state.FC == 1 ? JR_N16(cpu, instruction) : CPU::CounterAction::Advance;
+    CPU::CounterAction CPUJump::JR_C_N8(CPU& cpu, CPU::Instruction instruction) {
+        return cpu.state.FC == 1 ? JR_N8(cpu, instruction) : CPU::CounterAction::Advance;
     }
 
     CPU::CounterAction CPUJump::RST(CPU& cpu, CPU::Instruction instruction) {
@@ -41,28 +41,28 @@ namespace CPUJump {
         // TODO: Check if more clever way to do this later.
         switch (instruction.opcode) {
         case 0xC7:
-            instruction.pc = 0x00;
+            instruction.pc = 0x0000;
             break;
         case 0xCF:
-            instruction.pc = 0x08;
+            instruction.pc = 0x0008;
             break;
         case 0xD7:
-            instruction.pc = 0x10;
+            instruction.pc = 0x0010;
             break;
         case 0xDF:
-            instruction.pc = 0x18;
+            instruction.pc = 0x0018;
             break;
         case 0xE7:
-            instruction.pc = 0x20;
+            instruction.pc = 0x0020;
             break;
         case 0xEF:
-            instruction.pc = 0x28;
+            instruction.pc = 0x0028;
             break;
         case 0xF7:
-            instruction.pc = 0x30;
+            instruction.pc = 0x0030;
             break;
         case 0xFF:
-            instruction.pc = 0x38;
+            instruction.pc = 0x0038;
             break;
         default:
             // Should never be here
