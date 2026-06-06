@@ -134,6 +134,7 @@
     <ClCompile Include="tests\cpu\modules\cpu_16bit_arithmetic_tests.cpp" />
     <ClCompile Include="tests\cpu\modules\cpu_8bit_arithmetic_tests.cpp" />
     <ClCompile Include="tests\cpu\modules\cpu_carry_flag_tests.cpp" />
+    <ClCompile Include="tests\cpu\modules\cpu_jump_tests.cpp" />
     <ClCompile Include="tests\main.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -27,6 +27,9 @@
     <ClCompile Include="tests\cpu\modules\cpu_carry_flag_tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tests\cpu\modules\cpu_jump_tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\TestUtils.h">
